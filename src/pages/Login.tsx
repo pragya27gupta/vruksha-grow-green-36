@@ -179,7 +179,7 @@ const Login = () => {
         
         {/* Language Selector */}
         <div className="absolute top-6 right-6 z-10">
-          <div className="bg-card/95 backdrop-blur-sm rounded-lg p-2 border border-border/20 shadow-lg">
+          <div className="bg-card/95 backdrop-blur-sm rounded-lg p-2 border border-border/20 shadow-lg mr-4">
             <LanguageSelector />
           </div>
         </div>
