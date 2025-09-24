@@ -183,7 +183,7 @@ const Login = () => {
             <LanguageSelector />
           </div>
         </div>
-        <Card className="w-full max-w-md shadow-2xl border-border/20 bg-card/98 backdrop-blur-sm mt-20 lg:mt-0 mx-4">
+        <Card className="w-full max-w-md shadow-2xl border-border/20 bg-card/98 backdrop-blur-sm mt-24 lg:mt-0 mx-4">
           <CardHeader className="text-center pb-6">
             <div className="flex justify-center mb-6">
               <img src={vrukshaLogo} alt="VrukshaChain" className="h-16" />
