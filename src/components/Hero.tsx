@@ -15,8 +15,8 @@ const Hero = () => {
   const { toast } = useToast();
   
   const handleWhatsAppClick = () => {
-    // Navigate to the WhatsApp integration page
-    navigate('/whatsapp-api');
+    // Open WhatsApp directly with pre-filled message
+    window.open('https://api.whatsapp.com/send/?phone=917755062281&text=Hello+I+visited+your+AI+website+and+want+to+know+more%21&type=phone_number&app_absent=0', '_blank');
   };
   
   return (
