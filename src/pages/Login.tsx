@@ -183,16 +183,16 @@ const Login = () => {
             <LanguageSelector />
           </div>
         </div>
-        <Card className="w-full max-w-md shadow-2xl border-border/20 bg-card/98 backdrop-blur-sm mt-24 mx-4">
-          <CardHeader className="text-center pb-6">
-            <div className="flex justify-center mb-6">
-              <img src={vrukshaLogo} alt="VrukshaChain" className="h-16" />
+        <Card className="w-full max-w-md shadow-2xl border-border/20 bg-card/98 backdrop-blur-sm mt-16 mx-4">
+          <CardHeader className="text-center pb-4">
+            <div className="flex justify-center mb-4">
+              <img src={vrukshaLogo} alt="VrukshaChain" className="h-12" />
             </div>
-            <CardTitle className="text-3xl font-bold text-primary">{t('welcomeBack')}</CardTitle>
-            <CardDescription className="text-lg">
+            <CardTitle className="text-2xl font-bold text-primary">{t('welcomeBack')}</CardTitle>
+            <CardDescription className="text-base">
               {t('loginToAccount')}
             </CardDescription>
-            <div className="mt-4 p-3 bg-accent/10 rounded-lg">
+            <div className="mt-3 p-2 bg-accent/10 rounded-lg">
               <Dialog open={isQuickSignupOpen} onOpenChange={(open) => {
                 setIsQuickSignupOpen(open);
                 if (!open) resetQuickSignup();
@@ -327,14 +327,14 @@ const Login = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-2">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-1">
                 <Label htmlFor="role" className="text-sm font-medium">{t('selectRole')}</Label>
                 <Select
                   value={formData.role}
                   onValueChange={(value: UserRole) => setFormData({ ...formData, role: value })}
                 >
-                  <SelectTrigger className="h-12">
+                  <SelectTrigger className="h-10">
                     <SelectValue placeholder={t('selectRole')} />
                   </SelectTrigger>
                   <SelectContent>
@@ -353,7 +353,7 @@ const Login = () => {
                 </Select>
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <Label htmlFor="email" className="text-sm font-medium">{t('email')}</Label>
                 <Input
                   id="email"
@@ -361,11 +361,11 @@ const Login = () => {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   placeholder="demo@vrukshachain.com"
-                  className="h-12"
+                  className="h-10"
                 />
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <Label htmlFor="password" className="text-sm font-medium">{t('password')}</Label>
                 <Input
                   id="password"
@@ -373,11 +373,11 @@ const Login = () => {
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   placeholder="demo123"
-                  className="h-12"
+                  className="h-10"
                 />
               </div>
 
-              <Button type="submit" className="w-full h-12 text-lg font-semibold" disabled={isLoading}>
+              <Button type="submit" className="w-full h-10 text-base font-semibold" disabled={isLoading}>
                 {isLoading ? "Loading..." : t('login')}
               </Button>
 
