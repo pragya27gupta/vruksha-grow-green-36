@@ -16,7 +16,7 @@ const Hero = () => {
   
   const handleWhatsAppClick = () => {
     // Open WhatsApp directly with pre-filled message
-    window.open('https://api.whatsapp.com/send/?phone=917755062281&text=Hello+I+visited+your+AI+website+and+want+to+know+more%21&type=phone_number&app_absent=0', '_blank');
+    window.open('https://wa.me/917755062281?text=Hello%20I%20visited%20your%20AI%20website%20and%20want%20to%20know%20more!', '_blank');
   };
   
   return (
