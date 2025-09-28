@@ -9,61 +9,7 @@ import { toast } from '@/hooks/use-toast';
 export const ComplianceReports: React.FC = () => {
   const [selectedPeriod, setSelectedPeriod] = useState('monthly');
   const [selectedCategory, setSelectedCategory] = useState('all');
-
-  const handleExport = () => {
-    toast({
-      title: "Exporting Reports",
-      description: `Generating ${selectedPeriod} compliance reports for ${selectedCategory === 'all' ? 'all categories' : selectedCategory}. Download will start shortly.`,
-    });
-    // Simulate export after 2 seconds
-    setTimeout(() => {
-      const data = `Compliance Reports Export - ${new Date().toLocaleDateString()}\nPeriod: ${selectedPeriod}\nCategory: ${selectedCategory}\n\nTotal Reports: 156\nViolations Found: 23\nCompliance Rate: 85.3%`;
-      const link = document.createElement('a');
-      link.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(data);
-      link.download = `compliance-reports-${selectedPeriod}-${new Date().toISOString().split('T')[0]}.csv`;
-      link.click();
-    }, 2000);
-  };
-
-  const handleDownloadReport = (reportId: string, reportTitle: string) => {
-    toast({
-      title: "Downloading Report",
-      description: `Preparing download for ${reportTitle}`,
-    });
-    // Simulate download
-    setTimeout(() => {
-      const reportData = `Report ID: ${reportId}\nTitle: ${reportTitle}\nGenerated: ${new Date().toLocaleDateString()}\n\nDetailed compliance report content...`;
-      const link = document.createElement('a');
-      link.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(reportData);
-      link.download = `${reportId}-${reportTitle.replace(/\s+/g, '-')}.txt`;
-      link.click();
-    }, 1500);
-  };
-
-  const handleViewDetails = (reportId: string) => {
-    toast({
-      title: "Opening Report Details",
-      description: `Loading detailed view for report ${reportId}`,
-    });
-  };
-
-  const handlePeriodChange = (period: string) => {
-    setSelectedPeriod(period);
-    toast({
-      title: "Filter Updated",
-      description: `Showing ${period} compliance reports`,
-    });
-  };
-
-  const handleCategoryChange = (category: string) => {
-    setSelectedCategory(category);
-    toast({
-      title: "Category Filter Applied", 
-      description: `Filtering reports for ${category === 'all' ? 'all categories' : category}`,
-    });
-  };
-
-  const reportData = {
+  const [reportData, setReportData] = useState({
     summary: {
       totalReports: 156,
       violationsFound: 23,
@@ -124,7 +70,165 @@ export const ComplianceReports: React.FC = () => {
         { month: 'Jan', reports: 23, violations: 2 }
       ]
     }
+  });
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleExport = () => {
+    toast({
+      title: "Exporting Reports",
+      description: `Generating ${selectedPeriod} compliance reports for ${selectedCategory === 'all' ? 'all categories' : selectedCategory}. Download will start shortly.`,
+    });
+    
+    // Generate comprehensive CSV data
+    setTimeout(() => {
+      const csvHeaders = [
+        'Report ID',
+        'Title',
+        'Type',
+        'Date',
+        'Status',
+        'Severity',
+        'Violations',
+        'Compliance Score',
+        'Entity',
+        'Inspector',
+        'Follow-up Required',
+        'Financial Impact',
+        'Corrective Actions',
+        'Completion Date'
+      ];
+      
+      const csvData = reportData.recentReports.map(report => [
+        report.id,
+        report.title,
+        report.type,
+        report.date,
+        report.status,
+        report.severity,
+        report.violations,
+        `${report.complianceScore}%`,
+        report.title.split(' - ')[1] || 'N/A',
+        'Dr. Sarah Johnson',
+        report.violations > 0 ? 'Yes' : 'No',
+        report.violations > 0 ? `$${report.violations * 5000}` : '$0',
+        report.violations > 0 ? 'Required within 30 days' : 'None',
+        report.status === 'Completed' ? report.date : 'Pending'
+      ]);
+      
+      const csvContent = [
+        csvHeaders.join(','),
+        ...csvData.map(row => row.map(cell => `"${cell}"`).join(','))
+      ].join('\n');
+      
+      const summaryData = `
+COMPLIANCE REPORTS SUMMARY
+Generated: ${new Date().toLocaleString()}
+Period: ${selectedPeriod}
+Category: ${selectedCategory}
+
+Total Reports: ${reportData.summary.totalReports}
+Violations Found: ${reportData.summary.violationsFound}
+Compliance Rate: ${reportData.summary.complianceRate}%
+Average Response Time: ${reportData.summary.avgResponseTime}
+Critical Issues: ${reportData.summary.criticalIssues}
+
+DETAILED REPORTS:
+${csvContent}
+      `;
+      
+      const blob = new Blob([summaryData], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `compliance-reports-${selectedPeriod}-${new Date().toISOString().split('T')[0]}.csv`;
+      link.click();
+      URL.revokeObjectURL(url);
+    }, 2000);
   };
+
+  const handleDownloadReport = (reportId: string, reportTitle: string) => {
+    toast({
+      title: "Downloading Report",
+      description: `Preparing download for ${reportTitle}`,
+    });
+    // Simulate download
+    setTimeout(() => {
+      const reportData = `Report ID: ${reportId}\nTitle: ${reportTitle}\nGenerated: ${new Date().toLocaleDateString()}\n\nDetailed compliance report content...`;
+      const link = document.createElement('a');
+      link.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(reportData);
+      link.download = `${reportId}-${reportTitle.replace(/\s+/g, '-')}.txt`;
+      link.click();
+    }, 1500);
+  };
+
+  const handleViewDetails = (reportId: string) => {
+    toast({
+      title: "Opening Report Details",
+      description: `Loading detailed view for report ${reportId}`,
+    });
+  };
+
+  const handlePeriodChange = (period: string) => {
+    setSelectedPeriod(period);
+    setIsLoading(true);
+    
+    toast({
+      title: "Filter Updated",
+      description: `Loading ${period} compliance reports...`,
+    });
+    
+    // Simulate data filtering
+    setTimeout(() => {
+      const multiplier = period === 'weekly' ? 0.25 : period === 'quarterly' ? 3 : 1;
+      setReportData(prev => ({
+        ...prev,
+        summary: {
+          ...prev.summary,
+          totalReports: Math.floor(prev.summary.totalReports * multiplier),
+          violationsFound: Math.floor(prev.summary.violationsFound * multiplier),
+          pendingReviews: Math.floor(prev.summary.pendingReviews * multiplier)
+        }
+      }));
+      setIsLoading(false);
+      toast({
+        title: "Reports Updated",
+        description: `Now showing ${period} compliance data`,
+      });
+    }, 1500);
+  };
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+    setIsLoading(true);
+    
+    toast({
+      title: "Category Filter Applied", 
+      description: `Filtering reports for ${category === 'all' ? 'all categories' : category}...`,
+    });
+    
+    // Simulate category filtering
+    setTimeout(() => {
+      const filteredReports = reportData.recentReports.filter(report => {
+        if (category === 'all') return true;
+        if (category === 'organic') return report.title.toLowerCase().includes('organic');
+        if (category === 'pesticide') return report.title.toLowerCase().includes('pesticide');
+        if (category === 'labeling') return report.title.toLowerCase().includes('label');
+        if (category === 'traceability') return report.title.toLowerCase().includes('trace');
+        return true;
+      });
+      
+      setReportData(prev => ({
+        ...prev,
+        recentReports: filteredReports
+      }));
+      setIsLoading(false);
+      toast({
+        title: "Filter Applied",
+        description: `Showing ${filteredReports.length} reports for ${category}`,
+      });
+    }, 1000);
+  };
+
 
   return (
     <div className="space-y-6">
@@ -261,8 +365,14 @@ export const ComplianceReports: React.FC = () => {
           <CardDescription>Latest inspection reports and their findings</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            {reportData.recentReports.map((report) => (
+          {isLoading ? (
+            <div className="flex items-center justify-center py-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+              <span className="ml-2">Loading reports...</span>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {reportData.recentReports.map((report) => (
               <div key={report.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
@@ -299,8 +409,9 @@ export const ComplianceReports: React.FC = () => {
                   </Button>
                 </div>
               </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </CardContent>
       </Card>
 
