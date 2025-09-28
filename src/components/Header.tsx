@@ -31,14 +31,14 @@ const Header = () => {
   };
 
   return (
-    <header className="w-full bg-background/95 border-b border-border/30 sticky top-0 z-50 backdrop-blur-md shadow-sm">
+    <header className="w-full bg-background/95 backdrop-blur-md border-b border-border sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto px-2 sm:px-4 py-3 sm:py-4">
         <div className="flex items-center justify-between gap-2">
           {/* Logo */}
           <div className="flex items-center gap-2 cursor-pointer flex-shrink-0" onClick={() => navigate('/')}>
             <img src={vrukshaLogo} alt="VrukshaChain Logo" className="w-8 h-8 sm:w-10 sm:h-10" />
-            <span className="text-lg sm:text-2xl font-bold text-foreground hidden xs:block">VrukshaChain</span>
-            <span className="text-sm font-bold text-foreground block xs:hidden">VC</span>
+            <span className="text-lg sm:text-2xl font-bold text-foreground hidden sm:block">VrukshaChain</span>
+            <span className="text-lg font-bold text-foreground block sm:hidden">VC</span>
           </div>
 
           {/* Navigation - Simplified */}
@@ -65,7 +65,7 @@ const Header = () => {
 
           {/* Right side */}
           <div className="flex items-center gap-1 sm:gap-2 lg:gap-4 flex-shrink-0">
-            <div className="hidden xl:flex items-center gap-2 text-xs lg:text-sm text-muted-foreground bg-accent/5 px-2 lg:px-4 py-1 lg:py-2 rounded-full border border-accent/20">
+            <div className="hidden xl:flex items-center gap-2 text-xs lg:text-sm text-muted-foreground bg-accent/10 px-2 lg:px-4 py-1 lg:py-2 rounded-full border border-accent/20">
               <span className="text-accent font-medium">📞 +91 99725 24322</span>
             </div>
             
@@ -76,19 +76,19 @@ const Header = () => {
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="gap-1 text-xs sm:text-sm px-2 sm:px-3">
+                  <Button variant="outline" size="sm" className="gap-1 text-xs sm:text-sm px-2 sm:px-3 bg-background text-foreground border-border hover:bg-accent/10 hover:text-accent-foreground">
                     <User className="w-3 h-3 sm:w-4 sm:h-4" />
                     <span className="hidden sm:inline truncate max-w-20 lg:max-w-none">
                       {user.name || user.email}
                     </span>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuItem onClick={() => navigate(getDashboardPath(user.role))}>
+                <DropdownMenuContent align="end" className="w-48 bg-card border-border">
+                  <DropdownMenuItem onClick={() => navigate(getDashboardPath(user.role))} className="text-card-foreground hover:bg-accent/10">
                     <User className="w-4 h-4 mr-2" />
                     {t('dashboard')}
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={handleLogout}>
+                  <DropdownMenuItem onClick={handleLogout} className="text-card-foreground hover:bg-accent/10">
                     <LogOut className="w-4 h-4 mr-2" />
                     {t('logout')}
                   </DropdownMenuItem>
@@ -96,7 +96,12 @@ const Header = () => {
               </DropdownMenu>
             ) : (
               <div className="flex items-center gap-1 sm:gap-2">
-                <Button variant="outline" size="sm" onClick={handleLogin} className="text-xs sm:text-sm px-2 sm:px-3">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={handleLogin} 
+                  className="text-xs sm:text-sm px-2 sm:px-3 bg-background text-foreground border-border hover:bg-accent/10 hover:text-accent-foreground"
+                >
                   <LogIn className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
                   <span className="hidden sm:inline">{t('login')}</span>
                   <span className="sm:hidden">Login</span>
@@ -104,7 +109,7 @@ const Header = () => {
                 <Button 
                   variant="default" 
                   size="sm"
-                  className="hidden md:inline-flex text-xs lg:text-sm px-2 lg:px-4"
+                  className="hidden md:inline-flex text-xs lg:text-sm px-2 lg:px-4 bg-foreground text-background hover:bg-foreground/90"
                   onClick={() => navigate('/request-demo')}
                 >
                   {t('requestDemo')}
