@@ -204,25 +204,25 @@ const Login = () => {
           </div>
         </div>
         
-        <div className="w-full max-w-xs mx-auto">
+        <div className="w-full max-w-sm mx-auto">
           <Card className="w-full shadow-xl border-border/20 bg-card/98 backdrop-blur-sm">
-            <CardHeader className="text-center pb-1 pt-3">
-              <div className="flex justify-center mb-1">
-                <img src={vrukshaLogo} alt="VrukshaChain" className="h-8" />
+            <CardHeader className="text-center pb-2 pt-4">
+              <div className="flex justify-center mb-2">
+                <img src={vrukshaLogo} alt="VrukshaChain" className="h-10" />
               </div>
-              <CardTitle className="text-lg font-bold text-primary">{t('welcomeBack')}</CardTitle>
-              <CardDescription className="text-xs">
+              <CardTitle className="text-xl font-bold text-primary">{t('welcomeBack')}</CardTitle>
+              <CardDescription className="text-sm">
               {t('loginToAccount')}
               </CardDescription>
-              <div className="mt-1 p-1 bg-accent/10 rounded">
+              <div className="mt-2 p-2 bg-accent/10 rounded">
                 <Dialog open={isQuickSignupOpen} onOpenChange={(open) => {
                   setIsQuickSignupOpen(open);
                   if (!open) resetQuickSignup();
                 }}>
                   <DialogTrigger asChild>
                     <button className="w-full text-left hover:bg-accent/20 rounded p-1 transition-colors">
-                      <p className="text-xs text-accent font-medium">
-                        🆕 Quick signup
+                      <p className="text-sm text-accent font-medium">
+                        🆕 Quick signup with Aadhaar
                       </p>
                     </button>
                   </DialogTrigger>
@@ -348,24 +348,25 @@ const Login = () => {
                 </Dialog>
               </div>
             </CardHeader>
-            <CardContent className="pt-1 pb-3">
-              <form onSubmit={handleSubmit} className="space-y-2">
+            <CardContent className="pt-2 pb-4">
+              <form onSubmit={handleSubmit} className="space-y-3">
                 <div className="space-y-1">
-                  <Label htmlFor="role" className="text-xs font-medium">{t('selectRole')}</Label>
+                  <Label htmlFor="role" className="text-sm font-medium">{t('selectRole')}</Label>
                   <Select
                     value={formData.role}
                     onValueChange={(value: UserRole) => setFormData({ ...formData, role: value })}
                   >
-                    <SelectTrigger className="h-8 text-xs">
+                    <SelectTrigger className="h-9">
                       <SelectValue placeholder={t('selectRole')} />
                     </SelectTrigger>
                     <SelectContent className="max-h-48">
                       {roles.map((role) => (
                         <SelectItem key={role.value} value={role.value}>
                           <div className="flex items-center gap-2">
-                            <span className="text-xs">{role.icon}</span>
+                            <span className="text-sm">{role.icon}</span>
                             <div>
-                              <span className="font-medium text-xs">{role.label}</span>
+                              <span className="font-medium text-sm">{role.label}</span>
+                              <p className="text-xs text-muted-foreground">{role.description}</p>
                             </div>
                           </div>
                         </SelectItem>
@@ -375,34 +376,34 @@ const Login = () => {
                 </div>
 
                 <div className="space-y-1">
-                  <Label htmlFor="email" className="text-xs font-medium">{t('email')}</Label>
+                  <Label htmlFor="email" className="text-sm font-medium">{t('email')}</Label>
                   <Input
                     id="email"
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="demo@vrukshachain.com"
-                    className="h-8 text-xs"
+                    className="h-9"
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <Label htmlFor="password" className="text-xs font-medium">{t('password')}</Label>
+                  <Label htmlFor="password" className="text-sm font-medium">{t('password')}</Label>
                   <Input
                     id="password"
                     type="password"
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                     placeholder="demo123"
-                    className="h-8 text-xs"
+                    className="h-9"
                   />
                 </div>
 
-                <Button type="submit" className="w-full h-8 text-xs font-semibold" disabled={isLoading}>
+                <Button type="submit" className="w-full h-9 text-sm font-semibold" disabled={isLoading}>
                   {isLoading ? "Loading..." : t('login')}
                 </Button>
 
-                <div className="flex justify-between text-xs pt-1">
+                <div className="flex justify-between text-sm pt-1">
                   <Link to="/forgot-password" className="text-primary hover:underline">
                     {t('forgotPassword')}
                   </Link>
