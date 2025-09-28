@@ -161,29 +161,50 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-secondary/10 flex">
-      {/* Left side - Login Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 relative">
-        {/* Back to Home Button */}
-        <div className="absolute top-6 left-6 z-10">
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            onClick={() => navigate('/')}
-            className="gap-2 text-muted-foreground hover:text-foreground"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to Home
-          </Button>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-secondary/10 flex flex-col lg:flex-row">
+      {/* Top Navigation for Mobile */}
+      <div className="lg:hidden flex justify-between items-center p-4 pt-6 bg-background/80 backdrop-blur-sm border-b border-border/20 z-50">
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          onClick={() => navigate('/')}
+          className="gap-2 text-muted-foreground hover:text-foreground"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Home
+        </Button>
         
-        {/* Language Selector */}
-        <div className="absolute top-6 right-6 z-10">
-          <div className="bg-card/95 backdrop-blur-sm rounded-lg p-2 border border-border/20 shadow-lg mr-4">
-            <LanguageSelector />
+        <div className="bg-card/95 backdrop-blur-sm rounded-lg p-2 border border-border/20 shadow-lg">
+          <LanguageSelector />
+        </div>
+      </div>
+
+      {/* Left side - Login Form */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-4 lg:p-8 relative flex-1">
+        {/* Desktop Navigation */}
+        <div className="hidden lg:block">
+          {/* Back to Home Button */}
+          <div className="absolute top-6 left-6 z-10">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => navigate('/')}
+              className="gap-2 text-muted-foreground hover:text-foreground"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back to Home
+            </Button>
+          </div>
+          
+          {/* Language Selector */}
+          <div className="absolute top-6 right-6 z-10">
+            <div className="bg-card/95 backdrop-blur-sm rounded-lg p-2 border border-border/20 shadow-lg">
+              <LanguageSelector />
+            </div>
           </div>
         </div>
-        <Card className="w-full max-w-md shadow-2xl border-border/20 bg-card/98 backdrop-blur-sm mt-16 mx-4">
+        
+        <Card className="w-full max-w-md shadow-2xl border-border/20 bg-card/98 backdrop-blur-sm mt-0 lg:mt-16 mx-auto">
           <CardHeader className="text-center pb-4">
             <div className="flex justify-center mb-4">
               <img src={vrukshaLogo} alt="VrukshaChain" className="h-12" />
