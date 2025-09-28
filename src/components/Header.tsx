@@ -82,13 +82,13 @@ const Header = () => {
             {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </Button>
 
-          {/* Right side - Desktop */}
-          <div className="hidden md:flex items-center gap-1 sm:gap-2 lg:gap-4 flex-shrink-0">
+          {/* Right side - Always visible */}
+          <div className="flex items-center gap-1 sm:gap-2 lg:gap-4 flex-shrink-0">
             <div className="hidden xl:flex items-center gap-2 text-xs lg:text-sm text-muted-foreground bg-accent/10 px-2 lg:px-4 py-1 lg:py-2 rounded-full border border-accent/20">
               <span className="text-accent font-medium">📞 +91 99725 24322</span>
             </div>
             
-            <div className="hidden sm:block">
+            <div className="block">
               <LanguageSelector />
             </div>
             
@@ -135,9 +135,8 @@ const Header = () => {
                 </Button>
               </div>
             )}
+          </div>
         </div>
-
-        {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden absolute top-full left-0 right-0 bg-background/95 backdrop-blur-md border-b border-border shadow-lg">
             <div className="container mx-auto px-4 py-4 space-y-4">
@@ -163,63 +162,24 @@ const Header = () => {
                 </button>
               </div>
 
-              {/* Mobile Auth Buttons */}
+              {/* Mobile Auth Buttons - Only Request Demo */}
               <div className="border-t border-border pt-4 space-y-3">
-                <div className="flex items-center justify-between">
-                  <LanguageSelector />
-                  <div className="text-xs text-muted-foreground">📞 +91 99725 24322</div>
-                </div>
+                <div className="text-xs text-muted-foreground text-center">📞 +91 99725 24322</div>
                 
-                {user ? (
-                  <div className="space-y-2">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="w-full justify-start bg-background text-foreground border-border hover:bg-accent/10"
-                      onClick={() => {
-                        navigate(getDashboardPath(user.role));
-                        setIsMobileMenuOpen(false);
-                      }}
-                    >
-                      <User className="w-4 h-4 mr-2" />
-                      {t('dashboard')}
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="w-full justify-start bg-background text-foreground border-border hover:bg-accent/10"
-                      onClick={handleLogout}
-                    >
-                      <LogOut className="w-4 h-4 mr-2" />
-                      {t('logout')}
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="space-y-2">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="w-full justify-start bg-background text-foreground border-border hover:bg-accent/10"
-                      onClick={handleLogin}
-                    >
-                      <LogIn className="w-4 h-4 mr-2" />
-                      {t('login')}
-                    </Button>
-                    <Button 
-                      variant="default" 
-                      size="sm"
-                      className="w-full bg-foreground text-background hover:bg-foreground/90"
-                      onClick={() => handleNavigation('/request-demo')}
-                    >
-                      {t('requestDemo')}
-                    </Button>
-                  </div>
+                {!user && (
+                  <Button 
+                    variant="default" 
+                    size="sm"
+                    className="w-full bg-foreground text-background hover:bg-foreground/90 md:hidden"
+                    onClick={() => handleNavigation('/request-demo')}
+                  >
+                    {t('requestDemo')}
+                  </Button>
                 )}
               </div>
             </div>
           </div>
         )}
-      </div>
       </div>
     </header>
   );
