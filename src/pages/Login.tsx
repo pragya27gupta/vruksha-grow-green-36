@@ -163,58 +163,58 @@ const Login = () => {
   return (
     <div className="h-screen w-full overflow-hidden bg-gradient-to-br from-primary/10 via-background to-secondary/10 flex flex-col lg:flex-row">
       {/* Top Navigation for Mobile */}
-      <div className="lg:hidden flex justify-between items-center px-4 py-2 bg-background/80 backdrop-blur-sm border-b border-border/20 z-50 w-full flex-shrink-0">
+      <div className="lg:hidden flex justify-between items-center px-3 py-1 bg-background/80 backdrop-blur-sm border-b border-border/20 z-50 w-full flex-shrink-0 h-12">
         <Button 
           variant="ghost" 
           size="sm" 
           onClick={() => navigate('/')}
-          className="gap-1 text-muted-foreground hover:text-foreground text-xs p-1"
+          className="gap-1 text-muted-foreground hover:text-foreground text-xs p-1 h-8"
         >
           <ArrowLeft className="h-3 w-3" />
-          <span className="hidden xs:inline">Back</span>
+          <span>Back</span>
         </Button>
         
-        <div className="bg-card/95 backdrop-blur-sm rounded-lg p-1 border border-border/20 shadow-lg">
+        <div className="bg-card/95 backdrop-blur-sm rounded p-1 border border-border/20 shadow-lg">
           <LanguageSelector />
         </div>
       </div>
 
       {/* Left side - Login Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-2 lg:p-6 relative flex-1 overflow-hidden">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-2 lg:p-4 relative flex-1 overflow-hidden min-h-0">
         {/* Desktop Navigation */}
         <div className="hidden lg:block">
           {/* Back to Home Button */}
-          <div className="absolute top-3 left-3 z-10">
+          <div className="absolute top-2 left-2 z-10">
             <Button 
               variant="ghost" 
               size="sm" 
               onClick={() => navigate('/')}
-              className="gap-2 text-muted-foreground hover:text-foreground"
+              className="gap-1 text-muted-foreground hover:text-foreground text-sm p-2 h-8"
             >
-              <ArrowLeft className="h-4 w-4" />
-              Back to Home
+              <ArrowLeft className="h-3 w-3" />
+              Back
             </Button>
           </div>
           
           {/* Language Selector */}
-          <div className="absolute top-3 right-3 z-10">
-            <div className="bg-card/95 backdrop-blur-sm rounded-lg p-2 border border-border/20 shadow-lg">
+          <div className="absolute top-2 right-2 z-10">
+            <div className="bg-card/95 backdrop-blur-sm rounded p-1 border border-border/20 shadow-lg">
               <LanguageSelector />
             </div>
           </div>
         </div>
         
-        <div className="w-full max-w-sm mx-auto">
-          <Card className="w-full shadow-2xl border-border/20 bg-card/98 backdrop-blur-sm">
-            <CardHeader className="text-center pb-2">
-              <div className="flex justify-center mb-2">
-                <img src={vrukshaLogo} alt="VrukshaChain" className="h-10" />
+        <div className="w-full max-w-xs mx-auto">
+          <Card className="w-full shadow-xl border-border/20 bg-card/98 backdrop-blur-sm">
+            <CardHeader className="text-center pb-1 pt-3">
+              <div className="flex justify-center mb-1">
+                <img src={vrukshaLogo} alt="VrukshaChain" className="h-8" />
               </div>
-              <CardTitle className="text-xl font-bold text-primary">{t('welcomeBack')}</CardTitle>
-              <CardDescription className="text-sm">
-                {t('loginToAccount')}
+              <CardTitle className="text-lg font-bold text-primary">{t('welcomeBack')}</CardTitle>
+              <CardDescription className="text-xs">
+              {t('loginToAccount')}
               </CardDescription>
-              <div className="mt-2 p-2 bg-accent/10 rounded-lg">
+              <div className="mt-1 p-1 bg-accent/10 rounded">
                 <Dialog open={isQuickSignupOpen} onOpenChange={(open) => {
                   setIsQuickSignupOpen(open);
                   if (!open) resetQuickSignup();
@@ -222,7 +222,7 @@ const Login = () => {
                   <DialogTrigger asChild>
                     <button className="w-full text-left hover:bg-accent/20 rounded p-1 transition-colors">
                       <p className="text-xs text-accent font-medium">
-                        🆕 New User? Quick signup with Aadhaar
+                        🆕 Quick signup
                       </p>
                     </button>
                   </DialogTrigger>
@@ -348,25 +348,24 @@ const Login = () => {
                 </Dialog>
               </div>
             </CardHeader>
-            <CardContent className="pt-2">
-              <form onSubmit={handleSubmit} className="space-y-3">
+            <CardContent className="pt-1 pb-3">
+              <form onSubmit={handleSubmit} className="space-y-2">
                 <div className="space-y-1">
                   <Label htmlFor="role" className="text-xs font-medium">{t('selectRole')}</Label>
                   <Select
                     value={formData.role}
                     onValueChange={(value: UserRole) => setFormData({ ...formData, role: value })}
                   >
-                    <SelectTrigger className="h-9">
+                    <SelectTrigger className="h-8 text-xs">
                       <SelectValue placeholder={t('selectRole')} />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="max-h-48">
                       {roles.map((role) => (
                         <SelectItem key={role.value} value={role.value}>
-                          <div className="flex items-center gap-2 py-1">
-                            <span className="text-sm">{role.icon}</span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs">{role.icon}</span>
                             <div>
-                              <span className="font-medium text-sm">{role.label}</span>
-                              <p className="text-xs text-muted-foreground">{role.description}</p>
+                              <span className="font-medium text-xs">{role.label}</span>
                             </div>
                           </div>
                         </SelectItem>
@@ -383,7 +382,7 @@ const Login = () => {
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="demo@vrukshachain.com"
-                    className="h-9"
+                    className="h-8 text-xs"
                   />
                 </div>
 
@@ -395,15 +394,15 @@ const Login = () => {
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                     placeholder="demo123"
-                    className="h-9"
+                    className="h-8 text-xs"
                   />
                 </div>
 
-                <Button type="submit" className="w-full h-9 text-sm font-semibold" disabled={isLoading}>
+                <Button type="submit" className="w-full h-8 text-xs font-semibold" disabled={isLoading}>
                   {isLoading ? "Loading..." : t('login')}
                 </Button>
 
-                <div className="flex justify-between text-xs">
+                <div className="flex justify-between text-xs pt-1">
                   <Link to="/forgot-password" className="text-primary hover:underline">
                     {t('forgotPassword')}
                   </Link>
