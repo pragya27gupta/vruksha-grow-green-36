@@ -18,10 +18,49 @@ import {
   Download,
   RefreshCw
 } from 'lucide-react';
+import { toast } from '@/hooks/use-toast';
 
 export const RegulatoryAnalytics: React.FC = () => {
   const [selectedTimeframe, setSelectedTimeframe] = useState('6months');
   const [selectedRegion, setSelectedRegion] = useState('all');
+
+  const handleRefresh = () => {
+    toast({
+      title: "Refreshing Analytics",
+      description: "Loading latest regulatory analytics data...",
+    });
+  };
+
+  const handleExport = () => {
+    toast({
+      title: "Exporting Analytics",
+      description: `Generating analytics report for ${selectedTimeframe} timeframe. Download will start shortly.`,
+    });
+    // Simulate export
+    setTimeout(() => {
+      const data = `Regulatory Analytics Export - ${new Date().toLocaleDateString()}\nTimeframe: ${selectedTimeframe}\nRegion: ${selectedRegion}\n\nTotal Entities: 3,847\nCompliance Rate: 89.3%\nActive Inspections: 156`;
+      const link = document.createElement('a');
+      link.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(data);
+      link.download = `regulatory-analytics-${selectedTimeframe}-${new Date().toISOString().split('T')[0]}.csv`;
+      link.click();
+    }, 2000);
+  };
+
+  const handleTimeframeChange = (timeframe: string) => {
+    setSelectedTimeframe(timeframe);
+    toast({
+      title: "Timeframe Updated",
+      description: `Showing analytics for ${timeframe} period`,
+    });
+  };
+
+  const handleRegionChange = (region: string) => {
+    setSelectedRegion(region);
+    toast({
+      title: "Region Filter Applied",
+      description: `Filtering analytics for ${region === 'all' ? 'all regions' : region}`,
+    });
+  };
 
   const analyticsData = {
     overview: {
@@ -79,7 +118,7 @@ export const RegulatoryAnalytics: React.FC = () => {
           <p className="text-muted-foreground">Comprehensive compliance analytics and insights</p>
         </div>
         <div className="flex gap-2">
-          <Select value={selectedTimeframe} onValueChange={setSelectedTimeframe}>
+          <Select value={selectedTimeframe} onValueChange={handleTimeframeChange}>
             <SelectTrigger className="w-32">
               <SelectValue />
             </SelectTrigger>
@@ -90,7 +129,7 @@ export const RegulatoryAnalytics: React.FC = () => {
               <SelectItem value="2years">2 Years</SelectItem>
             </SelectContent>
           </Select>
-          <Select value={selectedRegion} onValueChange={setSelectedRegion}>
+          <Select value={selectedRegion} onValueChange={handleRegionChange}>
             <SelectTrigger className="w-32">
               <SelectValue />
             </SelectTrigger>
@@ -103,11 +142,11 @@ export const RegulatoryAnalytics: React.FC = () => {
               <SelectItem value="central">Central India</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={handleRefresh}>
             <RefreshCw className="h-4 w-4 mr-1" />
             Refresh
           </Button>
-          <Button size="sm">
+          <Button size="sm" onClick={handleExport}>
             <Download className="h-4 w-4 mr-1" />
             Export
           </Button>

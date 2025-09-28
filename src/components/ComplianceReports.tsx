@@ -4,10 +4,64 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Download, FileText, Calendar, TrendingUp, TrendingDown, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
+import { toast } from '@/hooks/use-toast';
 
 export const ComplianceReports: React.FC = () => {
   const [selectedPeriod, setSelectedPeriod] = useState('monthly');
   const [selectedCategory, setSelectedCategory] = useState('all');
+
+  const handleExport = () => {
+    toast({
+      title: "Exporting Reports",
+      description: `Generating ${selectedPeriod} compliance reports for ${selectedCategory === 'all' ? 'all categories' : selectedCategory}. Download will start shortly.`,
+    });
+    // Simulate export after 2 seconds
+    setTimeout(() => {
+      const data = `Compliance Reports Export - ${new Date().toLocaleDateString()}\nPeriod: ${selectedPeriod}\nCategory: ${selectedCategory}\n\nTotal Reports: 156\nViolations Found: 23\nCompliance Rate: 85.3%`;
+      const link = document.createElement('a');
+      link.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(data);
+      link.download = `compliance-reports-${selectedPeriod}-${new Date().toISOString().split('T')[0]}.csv`;
+      link.click();
+    }, 2000);
+  };
+
+  const handleDownloadReport = (reportId: string, reportTitle: string) => {
+    toast({
+      title: "Downloading Report",
+      description: `Preparing download for ${reportTitle}`,
+    });
+    // Simulate download
+    setTimeout(() => {
+      const reportData = `Report ID: ${reportId}\nTitle: ${reportTitle}\nGenerated: ${new Date().toLocaleDateString()}\n\nDetailed compliance report content...`;
+      const link = document.createElement('a');
+      link.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(reportData);
+      link.download = `${reportId}-${reportTitle.replace(/\s+/g, '-')}.txt`;
+      link.click();
+    }, 1500);
+  };
+
+  const handleViewDetails = (reportId: string) => {
+    toast({
+      title: "Opening Report Details",
+      description: `Loading detailed view for report ${reportId}`,
+    });
+  };
+
+  const handlePeriodChange = (period: string) => {
+    setSelectedPeriod(period);
+    toast({
+      title: "Filter Updated",
+      description: `Showing ${period} compliance reports`,
+    });
+  };
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+    toast({
+      title: "Category Filter Applied", 
+      description: `Filtering reports for ${category === 'all' ? 'all categories' : category}`,
+    });
+  };
 
   const reportData = {
     summary: {
@@ -84,7 +138,7 @@ export const ComplianceReports: React.FC = () => {
           <p className="text-muted-foreground">Comprehensive compliance monitoring and reporting</p>
         </div>
         <div className="flex gap-2">
-          <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
+          <Select value={selectedPeriod} onValueChange={handlePeriodChange}>
             <SelectTrigger className="w-32">
               <SelectValue />
             </SelectTrigger>
@@ -94,7 +148,7 @@ export const ComplianceReports: React.FC = () => {
               <SelectItem value="quarterly">Quarterly</SelectItem>
             </SelectContent>
           </Select>
-          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+          <Select value={selectedCategory} onValueChange={handleCategoryChange}>
             <SelectTrigger className="w-40">
               <SelectValue />
             </SelectTrigger>
@@ -106,7 +160,7 @@ export const ComplianceReports: React.FC = () => {
               <SelectItem value="traceability">Traceability</SelectItem>
             </SelectContent>
           </Select>
-          <Button className="gap-2">
+          <Button className="gap-2" onClick={handleExport}>
             <Download className="h-4 w-4" />
             Export
           </Button>
@@ -236,11 +290,11 @@ export const ComplianceReports: React.FC = () => {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" onClick={() => handleDownloadReport(report.id, report.title)}>
                     <Download className="h-4 w-4 mr-1" />
                     Download
                   </Button>
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" onClick={() => handleViewDetails(report.id)}>
                     View Details
                   </Button>
                 </div>

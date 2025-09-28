@@ -7,11 +7,48 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Shield, AlertTriangle, CheckCircle, BarChart3, Download } from 'lucide-react';
 import { ComplianceReports } from '@/components/ComplianceReports';
 import { RegulatoryAnalytics } from '@/components/RegulatoryAnalytics';
+import { toast } from '@/hooks/use-toast';
 
 const RegulatorDashboard = () => {
   const { t } = useTranslation();
 
   console.log('RegulatorDashboard component rendered');
+
+  const handleScheduleInspection = () => {
+    toast({
+      title: "Inspection Scheduled",
+      description: "New compliance inspection has been scheduled for next week.",
+    });
+  };
+
+  const handleGenerateReport = () => {
+    toast({
+      title: "Report Generated",
+      description: "Compliance summary report is being generated. Download will start shortly.",
+    });
+    // Simulate download after 2 seconds
+    setTimeout(() => {
+      const link = document.createElement('a');
+      link.href = 'data:text/plain;charset=utf-8,Compliance Report - Generated on ' + new Date().toLocaleDateString();
+      link.download = `compliance-report-${new Date().toISOString().split('T')[0]}.txt`;
+      link.click();
+    }, 2000);
+  };
+
+  const handleIssueAlert = () => {
+    toast({
+      title: "Alert Issued",
+      description: "Compliance alert has been sent to all registered entities.",
+      variant: "default"
+    });
+  };
+
+  const handleViewViolationDetails = (violationId: string) => {
+    toast({
+      title: "Opening Violation Details",
+      description: `Loading detailed information for violation ${violationId}`,
+    });
+  };
 
   return (
     <div className="min-h-screen bg-background p-4 md:p-6">
@@ -116,7 +153,7 @@ const RegulatorDashboard = () => {
                           <h4 className="font-semibold mt-2">{violation.entity}</h4>
                           <p className="text-sm text-muted-foreground">{violation.type} • {violation.date}</p>
                         </div>
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline" size="sm" onClick={() => handleViewViolationDetails(violation.id)}>
                           View Details
                         </Button>
                       </div>
@@ -127,7 +164,7 @@ const RegulatorDashboard = () => {
 
               {/* Quick Actions */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+                <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={handleScheduleInspection}>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-lg">
                       <Shield className="h-5 w-5" />
@@ -136,7 +173,7 @@ const RegulatorDashboard = () => {
                     <CardDescription>Plan new compliance inspections</CardDescription>
                   </CardHeader>
                 </Card>
-                <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+                <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={handleGenerateReport}>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-lg">
                       <Download className="h-5 w-5" />
@@ -145,7 +182,7 @@ const RegulatorDashboard = () => {
                     <CardDescription>Create compliance summary reports</CardDescription>
                   </CardHeader>
                 </Card>
-                <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+                <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={handleIssueAlert}>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-lg">
                       <AlertTriangle className="h-5 w-5" />
