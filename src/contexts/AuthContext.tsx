@@ -7,12 +7,14 @@ interface User {
   email: string;
   role: UserRole;
   name?: string;
+  phone?: string;
 }
 
 interface AuthContextType {
   user: User | null;
   login: (email: string, password: string, role: UserRole) => Promise<boolean>;
-  signup: (email: string, password: string, role: UserRole, name?: string) => Promise<boolean>;
+  loginWithPhone: (phone: string, role: UserRole) => Promise<boolean>;
+  signup: (email: string, password: string, role: UserRole, name?: string, phone?: string) => Promise<boolean>;
   logout: () => void;
   isAuthenticated: boolean;
 }
@@ -73,12 +75,49 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return false;
   };
 
-  const signup = async (email: string, password: string, role: UserRole, name?: string): Promise<boolean> => {
+  const loginWithPhone = async (phone: string, role: UserRole): Promise<boolean> => {
+    // Check for existing user with phone number
+    const users = JSON.parse(localStorage.getItem('vrukshachain_users') || '[]');
+    const foundUser = users.find((u: any) => 
+      u.phone === phone && u.role === role
+    );
+
+    if (foundUser) {
+      const userData = {
+        id: foundUser.id,
+        email: foundUser.email,
+        role: foundUser.role,
+        name: foundUser.name,
+        phone: foundUser.phone
+      };
+      setUser(userData);
+      localStorage.setItem('vrukshachain_user', JSON.stringify(userData));
+      return true;
+    }
+
+    // For demo purposes, allow any phone login with farmers
+    if (role === 'farmer') {
+      const userData = {
+        id: 'phone-' + phone,
+        email: `${phone}@phone.demo`,
+        role,
+        name: 'Phone User',
+        phone
+      };
+      setUser(userData);
+      localStorage.setItem('vrukshachain_user', JSON.stringify(userData));
+      return true;
+    }
+
+    return false;
+  };
+
+  const signup = async (email: string, password: string, role: UserRole, name?: string, phone?: string): Promise<boolean> => {
     try {
       const users = JSON.parse(localStorage.getItem('vrukshachain_users') || '[]');
       
       // Check if user already exists
-      const existingUser = users.find((u: any) => u.email === email);
+      const existingUser = users.find((u: any) => u.email === email || (phone && u.phone === phone));
       if (existingUser) {
         return false;
       }
@@ -88,7 +127,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         email,
         password,
         role,
-        name: name || email.split('@')[0]
+        name: name || email.split('@')[0],
+        phone
       };
 
       users.push(newUser);
@@ -98,7 +138,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         id: newUser.id,
         email: newUser.email,
         role: newUser.role,
-        name: newUser.name
+        name: newUser.name,
+        phone: newUser.phone
       };
       setUser(userData);
       localStorage.setItem('vrukshachain_user', JSON.stringify(userData));
@@ -116,6 +157,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const value = {
     user,
     login,
+    loginWithPhone,
     signup,
     logout,
     isAuthenticated: !!user

@@ -10,6 +10,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { toast } from '@/hooks/use-toast';
+import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ArrowLeft, Phone, CreditCard, CheckCircle } from 'lucide-react';
 import LanguageSelector from '@/components/LanguageSelector';
 import vrukshaLogo from '@/assets/vrukshachain-logo-new.png';
@@ -18,13 +20,19 @@ import authenticFarmer from '@/assets/authentic-farmer.jpg';
 const Login = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, loginWithPhone } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
+    phone: '',
     role: '' as UserRole | ''
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [phoneLogin, setPhoneLogin] = useState({
+    step: 1, // 1: phone input, 2: otp verification
+    otp: '',
+    isVerifying: false
+  });
   const [isQuickSignupOpen, setIsQuickSignupOpen] = useState(false);
   const [quickSignupData, setQuickSignupData] = useState({
     aadhaar: '',
@@ -158,6 +166,87 @@ const Login = () => {
       otp: '',
       step: 1
     });
+  };
+
+  const handlePhoneLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.phone || !formData.role) {
+      toast({
+        title: "Error",
+        description: "Please fill in phone number and select role",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (formData.phone.length !== 10) {
+      toast({
+        title: "Error", 
+        description: "Phone number must be 10 digits",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setPhoneLogin(prev => ({ ...prev, isVerifying: true }));
+    
+    // Simulate OTP sending
+    setTimeout(() => {
+      setPhoneLogin(prev => ({ ...prev, step: 2, isVerifying: false }));
+      toast({
+        title: "OTP Sent",
+        description: `Verification code sent to +91 ${formData.phone}`
+      });
+    }, 1500);
+  };
+
+  const handleOTPLogin = async () => {
+    if (!phoneLogin.otp || phoneLogin.otp.length !== 6) {
+      toast({
+        title: "Error",
+        description: "Please enter a valid 6-digit OTP",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setPhoneLogin(prev => ({ ...prev, isVerifying: true }));
+    
+    // Simulate OTP verification and login
+    setTimeout(async () => {
+      try {
+        if (!formData.role) {
+          toast({
+            title: "Error",
+            description: "Please select a role",
+            variant: "destructive"
+          });
+          return;
+        }
+        const success = await loginWithPhone(formData.phone, formData.role as UserRole);
+        if (success) {
+          toast({
+            title: "Success",
+            description: `Welcome! Redirecting to ${formData.role} dashboard...`
+          });
+          navigate(`/dashboard/${formData.role}`);
+        } else {
+          toast({
+            title: "Error",
+            description: "Phone login failed",
+            variant: "destructive"
+          });
+        }
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Login failed",
+          variant: "destructive"
+        });
+      } finally {
+        setPhoneLogin(prev => ({ ...prev, isVerifying: false }));
+      }
+    }, 1000);
   };
 
   return (
@@ -349,59 +438,175 @@ const Login = () => {
               </div>
             </CardHeader>
             <CardContent className="pt-3 pb-6 px-6">
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="role" className="text-sm font-medium">{t('selectRole')}</Label>
-                  <Select
-                    value={formData.role}
-                    onValueChange={(value: UserRole) => setFormData({ ...formData, role: value })}
-                  >
-                    <SelectTrigger className="h-11">
-                      <SelectValue placeholder={t('selectRole')} />
-                    </SelectTrigger>
-                    <SelectContent className="max-h-48">
-                      {roles.map((role) => (
-                        <SelectItem key={role.value} value={role.value}>
-                          <div className="flex items-center gap-3 py-2">
-                            <span className="text-base">{role.icon}</span>
-                            <div>
-                              <span className="font-medium text-sm">{role.label}</span>
-                              <p className="text-xs text-muted-foreground">{role.description}</p>
-                            </div>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+              <Tabs defaultValue="email" className="space-y-4">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="email">Email Login</TabsTrigger>
+                  <TabsTrigger value="phone">Phone Login</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="email" className="space-y-4 mt-4">
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="role" className="text-sm font-medium">{t('selectRole')}</Label>
+                      <Select
+                        value={formData.role}
+                        onValueChange={(value: UserRole) => setFormData({ ...formData, role: value })}
+                      >
+                        <SelectTrigger className="h-11">
+                          <SelectValue placeholder={t('selectRole')} />
+                        </SelectTrigger>
+                        <SelectContent className="max-h-48">
+                          {roles.map((role) => (
+                            <SelectItem key={role.value} value={role.value}>
+                              <div className="flex items-center gap-3 py-2">
+                                <span className="text-base">{role.icon}</span>
+                                <div>
+                                  <span className="font-medium text-sm">{role.label}</span>
+                                  <p className="text-xs text-muted-foreground">{role.description}</p>
+                                </div>
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-sm font-medium">{t('email')}</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="demo@vrukshachain.com"
-                    className="h-11"
-                  />
-                </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="email" className="text-sm font-medium">{t('email')}</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        placeholder="demo@vrukshachain.com"
+                        className="h-11"
+                      />
+                    </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="password" className="text-sm font-medium">{t('password')}</Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    value={formData.password}
-                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    placeholder="demo123"
-                    className="h-11"
-                  />
-                </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="password" className="text-sm font-medium">{t('password')}</Label>
+                      <Input
+                        id="password"
+                        type="password"
+                        value={formData.password}
+                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                        placeholder="demo123"
+                        className="h-11"
+                      />
+                    </div>
 
-                <Button type="submit" className="w-full h-11 text-base font-semibold" disabled={isLoading}>
-                  {isLoading ? "Loading..." : t('login')}
-                </Button>
+                    <Button type="submit" className="w-full h-11 text-base font-semibold" disabled={isLoading}>
+                      {isLoading ? "Loading..." : t('login')}
+                    </Button>
+                  </form>
+                </TabsContent>
+
+                <TabsContent value="phone" className="space-y-4 mt-4">
+                  {phoneLogin.step === 1 ? (
+                    <form onSubmit={handlePhoneLogin} className="space-y-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="phone-role" className="text-sm font-medium">{t('selectRole')}</Label>
+                        <Select
+                          value={formData.role}
+                          onValueChange={(value: UserRole) => setFormData({ ...formData, role: value })}
+                        >
+                          <SelectTrigger className="h-11">
+                            <SelectValue placeholder={t('selectRole')} />
+                          </SelectTrigger>
+                          <SelectContent className="max-h-48">
+                            {roles.filter(role => role.value === 'farmer').map((role) => (
+                              <SelectItem key={role.value} value={role.value}>
+                                <div className="flex items-center gap-3 py-2">
+                                  <span className="text-base">{role.icon}</span>
+                                  <div>
+                                    <span className="font-medium text-sm">{role.label}</span>
+                                    <p className="text-xs text-muted-foreground">{role.description}</p>
+                                  </div>
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <p className="text-xs text-muted-foreground">
+                          Phone login is currently available for farmers only
+                        </p>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="phone" className="text-sm font-medium">Phone Number</Label>
+                        <div className="flex">
+                          <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-input bg-muted text-muted-foreground text-sm">
+                            +91
+                          </span>
+                          <Input
+                            id="phone"
+                            value={formData.phone}
+                            onChange={(e) => {
+                              const value = e.target.value.replace(/\D/g, '').slice(0, 10);
+                              setFormData({ ...formData, phone: value });
+                            }}
+                            placeholder="Enter 10-digit phone number"
+                            maxLength={10}
+                            className="rounded-l-none h-11"
+                          />
+                        </div>
+                      </div>
+
+                      <Button 
+                        type="submit" 
+                        className="w-full h-11 text-base font-semibold" 
+                        disabled={phoneLogin.isVerifying || formData.role !== 'farmer'}
+                      >
+                        {phoneLogin.isVerifying ? "Sending OTP..." : "Send OTP"}
+                      </Button>
+                    </form>
+                  ) : (
+                    <div className="space-y-4">
+                      <div className="text-center p-4 bg-muted rounded-lg">
+                        <Phone className="h-8 w-8 mx-auto mb-2 text-accent" />
+                        <p className="text-sm">
+                          OTP sent to +91 {formData.phone}
+                        </p>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="phone-otp" className="text-sm font-medium">Enter OTP</Label>
+                        <InputOTP
+                          maxLength={6}
+                          value={phoneLogin.otp}
+                          onChange={(value) => setPhoneLogin(prev => ({ ...prev, otp: value }))}
+                        >
+                          <InputOTPGroup>
+                            <InputOTPSlot index={0} />
+                            <InputOTPSlot index={1} />
+                            <InputOTPSlot index={2} />
+                            <InputOTPSlot index={3} />
+                            <InputOTPSlot index={4} />
+                            <InputOTPSlot index={5} />
+                          </InputOTPGroup>
+                        </InputOTP>
+                      </div>
+
+                      <div className="flex gap-2">
+                        <Button 
+                          variant="outline" 
+                          onClick={() => setPhoneLogin(prev => ({ ...prev, step: 1, otp: '' }))}
+                          disabled={phoneLogin.isVerifying}
+                          className="flex-1"
+                        >
+                          Back
+                        </Button>
+                        <Button 
+                          onClick={handleOTPLogin} 
+                          disabled={phoneLogin.isVerifying || phoneLogin.otp.length !== 6}
+                          className="flex-1"
+                        >
+                          {phoneLogin.isVerifying ? "Verifying..." : "Verify & Login"}
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </TabsContent>
 
                 <div className="flex justify-between text-sm pt-2">
                   <Link to="/forgot-password" className="text-primary hover:underline">
@@ -411,7 +616,7 @@ const Login = () => {
                     {t('signup')}
                   </Link>
                 </div>
-              </form>
+              </Tabs>
             </CardContent>
           </Card>
         </div>
