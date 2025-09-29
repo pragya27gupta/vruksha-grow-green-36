@@ -332,27 +332,27 @@ const ProcessorDashboard = () => {
 
           <TabsContent value="batches">
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-semibold">{t('batchesAwaiting')}</h2>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                <h2 className="text-xl sm:text-2xl font-semibold">{t('batchesAwaiting')}</h2>
                 <Badge variant="outline">{batches.length} batches</Badge>
               </div>
 
               <div className="grid gap-4">
                 {batches.map((batch) => (
                     <Card key={batch.id} className="hover:shadow-md transition-shadow duration-200">
-                      <CardContent className="p-6">
-                        <div className="flex items-start justify-between mb-4">
-                          <div className="flex items-start gap-4">
+                      <CardContent className="p-3 sm:p-4 md:p-6">
+                        <div className="flex flex-col sm:flex-row items-start justify-between gap-3 mb-4">
+                          <div className="flex items-start gap-3 w-full sm:w-auto">
                             {/* Herb thumbnail */}
-                            <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-green-200 rounded-lg flex items-center justify-center">
-                              <span className="text-2xl">
+                            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-green-100 to-green-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                              <span className="text-xl sm:text-2xl">
                                 {batch.cropSpecies === 'Turmeric' ? '🌱' : 
                                  batch.cropSpecies === 'Ashwagandha' ? '🌿' : '🍃'}
                               </span>
                             </div>
-                            <div>
-                              <h3 className="font-semibold text-lg">Batch {batch.id}</h3>
-                              <p className="text-sm text-muted-foreground">
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-semibold text-base sm:text-lg truncate">Batch {batch.id}</h3>
+                              <p className="text-xs sm:text-sm text-muted-foreground break-words">
                                 {batch.cropSpecies} • {batch.weight} kg • Farmer: {batch.farmerId}
                               </p>
                             </div>
@@ -362,8 +362,8 @@ const ProcessorDashboard = () => {
 
                       <div className="mb-4">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm font-medium">Processing Progress</span>
-                          <span className="text-sm text-muted-foreground">
+                          <span className="text-xs sm:text-sm font-medium">Processing Progress</span>
+                          <span className="text-xs sm:text-sm text-muted-foreground">
                             {getProgressValue(batch)}%
                           </span>
                         </div>
@@ -371,19 +371,19 @@ const ProcessorDashboard = () => {
                       </div>
 
                       <div className="space-y-2 mb-4">
-                        <h4 className="font-medium flex items-center gap-2">
-                          <Factory className="h-4 w-4" />
-                          Processing Steps Completed:
+                        <h4 className="font-medium flex items-center gap-2 text-sm sm:text-base">
+                          <Factory className="h-4 w-4 flex-shrink-0" />
+                          <span className="truncate">Processing Steps Completed:</span>
                         </h4>
                         {batch.processSteps.length > 0 ? (
                           batch.processSteps.map((step) => (
-                            <div key={step.id} className="flex items-center gap-2 text-sm p-2 bg-muted/50 rounded-md">
-                              <span className="text-lg">
+                            <div key={step.id} className="flex flex-wrap items-center gap-2 text-xs sm:text-sm p-2 bg-muted/50 rounded-md">
+                              <span className="text-base sm:text-lg">
                                 {step.type === 'drying' ? '🌀' : 
                                  step.type === 'grinding' ? '⚙️' : 
                                  step.type === 'storage' ? '📦' : '🔬'}
                               </span>
-                              <CheckCircle className="h-4 w-4 text-green-600" />
+                              <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 text-green-600 flex-shrink-0" />
                               <span className="font-medium">{step.type.charAt(0).toUpperCase() + step.type.slice(1)}</span>
                               {step.temperature && (
                                 <Badge variant="outline" className="text-xs">
@@ -398,26 +398,30 @@ const ProcessorDashboard = () => {
                             </div>
                           ))
                         ) : (
-                          <p className="text-sm text-muted-foreground">No processing steps completed yet</p>
+                          <p className="text-xs sm:text-sm text-muted-foreground">No processing steps completed yet</p>
                         )}
                       </div>
 
-                      <div className="flex gap-2">
-                        <Button variant="outline" size="sm" onClick={() => handleViewDetails(batch)}>
+                      <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2">
+                        <Button variant="outline" size="sm" onClick={() => handleViewDetails(batch)} className="text-xs">
                           <Eye className="h-3 w-3 mr-1" />
-                          View Details
+                          <span className="hidden sm:inline">View Details</span>
+                          <span className="sm:hidden">View</span>
                         </Button>
-                        <Button variant="outline" size="sm" onClick={() => handleAddStepClick(batch)}>
+                        <Button variant="outline" size="sm" onClick={() => handleAddStepClick(batch)} className="text-xs">
                           <Plus className="h-3 w-3 mr-1" />
-                          Add Process Step
+                          <span className="hidden sm:inline">Add Step</span>
+                          <span className="sm:hidden">Add</span>
                         </Button>
-                        <Button variant="outline" size="sm" className="flex items-center gap-1" onClick={() => handleTagLabClick(batch)}>
+                        <Button variant="outline" size="sm" className="flex items-center gap-1 text-xs" onClick={() => handleTagLabClick(batch)}>
                           <FlaskConical className="h-3 w-3" />
-                          Tag Lab
+                          <span className="hidden sm:inline">Tag Lab</span>
+                          <span className="sm:hidden">Lab</span>
                         </Button>
-                        <Button variant="outline" size="sm" onClick={() => handleUploadCertClick(batch)}>
+                        <Button variant="outline" size="sm" onClick={() => handleUploadCertClick(batch)} className="text-xs">
                           <Upload className="h-3 w-3 mr-1" />
-                          Upload Certificate
+                          <span className="hidden sm:inline">Certificate</span>
+                          <span className="sm:hidden">Cert</span>
                         </Button>
                       </div>
                     </CardContent>
@@ -429,17 +433,17 @@ const ProcessorDashboard = () => {
 
           <TabsContent value="add-process">
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Factory className="h-5 w-5" />
+              <CardHeader className="p-4 sm:p-6">
+                <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
+                  <Factory className="h-4 w-4 sm:h-5 sm:w-5" />
                   {t('addProcessingStep')}
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-xs sm:text-sm">
                   Record processing details and environmental conditions
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <form onSubmit={handleAddProcessStep} className="space-y-6">
+              <CardContent className="p-4 sm:p-6">
+                <form onSubmit={handleAddProcessStep} className="space-y-4 sm:space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="batchId">Select Batch *</Label>
@@ -537,12 +541,12 @@ const ProcessorDashboard = () => {
                     />
                   </div>
 
-                  <div className="flex gap-4">
-                    <Button type="submit" className="flex items-center gap-2">
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                    <Button type="submit" className="flex items-center gap-2 justify-center">
                       <Plus className="h-4 w-4" />
                       Add Processing Step
                     </Button>
-                    <Button type="button" variant="outline" className="flex items-center gap-2">
+                    <Button type="button" variant="outline" className="flex items-center gap-2 justify-center">
                       <FileText className="h-4 w-4" />
                       Upload Certificate
                     </Button>
@@ -553,33 +557,33 @@ const ProcessorDashboard = () => {
           </TabsContent>
 
           <TabsContent value="analytics">
-            <div className="grid gap-6">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid gap-4 sm:gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 <Card className="bg-gradient-to-br from-blue-50 to-cyan-50 border-blue-200">
-                  <CardHeader className="pb-2">
-                    <CardDescription className="text-blue-700">⏳ Active Batches</CardDescription>
-                    <CardTitle className="text-3xl text-blue-800">12</CardTitle>
+                  <CardHeader className="pb-2 p-3 sm:p-4">
+                    <CardDescription className="text-blue-700 text-xs sm:text-sm">⏳ Active Batches</CardDescription>
+                    <CardTitle className="text-2xl sm:text-3xl text-blue-800">12</CardTitle>
                   </CardHeader>
                 </Card>
                 <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
-                  <CardHeader className="pb-2">
-                    <CardDescription className="text-green-700">✅ Completed This Month</CardDescription>
-                    <CardTitle className="text-3xl text-green-800">47</CardTitle>
+                  <CardHeader className="pb-2 p-3 sm:p-4">
+                    <CardDescription className="text-green-700 text-xs sm:text-sm">✅ Completed This Month</CardDescription>
+                    <CardTitle className="text-2xl sm:text-3xl text-green-800">47</CardTitle>
                   </CardHeader>
                 </Card>
                 <Card className="bg-gradient-to-br from-purple-50 to-violet-50 border-purple-200">
-                  <CardHeader className="pb-2">
-                    <CardDescription className="text-purple-700">🏆 Quality Score</CardDescription>
-                    <CardTitle className="text-3xl text-purple-800">98.5%</CardTitle>
+                  <CardHeader className="pb-2 p-3 sm:p-4">
+                    <CardDescription className="text-purple-700 text-xs sm:text-sm">🏆 Quality Score</CardDescription>
+                    <CardTitle className="text-2xl sm:text-3xl text-purple-800">98.5%</CardTitle>
                   </CardHeader>
                 </Card>
                 <Card className="bg-gradient-to-br from-orange-50 to-amber-50 border-orange-200">
-                  <CardHeader className="pb-2">
-                    <CardDescription className="text-orange-700">⚡ Processing Efficiency</CardDescription>
-                    <CardTitle className="text-3xl text-orange-800">{efficiency}%</CardTitle>
+                  <CardHeader className="pb-2 p-3 sm:p-4">
+                    <CardDescription className="text-orange-700 text-xs sm:text-sm">⚡ Processing Efficiency</CardDescription>
+                    <CardTitle className="text-2xl sm:text-3xl text-orange-800">{efficiency}%</CardTitle>
                     <p className="text-xs text-orange-600 mt-1">↑ 5% from last month</p>
                   </CardHeader>
-                  <CardContent className="pt-2">
+                  <CardContent className="pt-2 px-3 pb-3 sm:px-4 sm:pb-4">
                     <div className="space-y-2">
                       <Label className="text-xs">Update Efficiency</Label>
                       <div className="flex gap-2">
@@ -595,7 +599,7 @@ const ProcessorDashboard = () => {
                           size="sm" 
                           onClick={handleUpdateEfficiency}
                           disabled={loading}
-                          className="h-8"
+                          className="h-8 text-xs sm:text-sm"
                         >
                           Update
                         </Button>
@@ -671,22 +675,22 @@ const ProcessorDashboard = () => {
 
         {/* View Details Dialog */}
         <Dialog open={showViewDetails} onOpenChange={setShowViewDetails}>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>Batch Details - {selectedBatch?.id}</DialogTitle>
-              <DialogDescription>
+              <DialogTitle className="text-base sm:text-lg">Batch Details - {selectedBatch?.id}</DialogTitle>
+              <DialogDescription className="text-xs sm:text-sm">
                 Complete processing information and history
               </DialogDescription>
             </DialogHeader>
             {selectedBatch && (
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 {loading && (
                   <div className="flex items-center justify-center py-4">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
                   </div>
                 )}
                 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div className="space-y-2">
                     <Label>Crop Species</Label>
                     <p className="font-medium">{selectedBatch.cropSpecies}</p>
@@ -793,15 +797,15 @@ const ProcessorDashboard = () => {
 
         {/* Add Process Step Dialog */}
         <Dialog open={showAddStep} onOpenChange={setShowAddStep}>
-          <DialogContent>
+          <DialogContent className="max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>Add Processing Step</DialogTitle>
-              <DialogDescription>
+              <DialogTitle className="text-base sm:text-lg">Add Processing Step</DialogTitle>
+              <DialogDescription className="text-xs sm:text-sm">
                 Record new processing step for Batch {selectedBatch?.id}
               </DialogDescription>
             </DialogHeader>
             <form onSubmit={handleAddProcessStep} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Process Type</Label>
                   <Select
@@ -875,10 +879,10 @@ const ProcessorDashboard = () => {
 
         {/* Tag Lab Dialog */}
         <Dialog open={showTagLab} onOpenChange={setShowTagLab}>
-          <DialogContent>
+          <DialogContent className="max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>Tag Laboratory for Testing</DialogTitle>
-              <DialogDescription>
+              <DialogTitle className="text-base sm:text-lg">Tag Laboratory for Testing</DialogTitle>
+              <DialogDescription className="text-xs sm:text-sm">
                 Send Batch {selectedBatch?.id} for quality testing
               </DialogDescription>
             </DialogHeader>
@@ -950,10 +954,10 @@ const ProcessorDashboard = () => {
 
         {/* Upload Certificate Dialog */}
         <Dialog open={showUploadCert} onOpenChange={setShowUploadCert}>
-          <DialogContent>
+          <DialogContent className="max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>Upload Certificate</DialogTitle>
-              <DialogDescription>
+              <DialogTitle className="text-base sm:text-lg">Upload Certificate</DialogTitle>
+              <DialogDescription className="text-xs sm:text-sm">
                 Upload quality certificate for Batch {selectedBatch?.id}
               </DialogDescription>
             </DialogHeader>
