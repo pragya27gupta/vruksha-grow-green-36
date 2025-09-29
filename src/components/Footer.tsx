@@ -26,7 +26,7 @@ const Footer = () => {
   return (
     <footer className="bg-primary text-primary-foreground">
       {/* Footer Content */}
-      <div className="py-16">
+      <div className="py-8 md:py-16">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {footerSections.map((section, index) => (
@@ -48,7 +48,7 @@ const Footer = () => {
       </div>
 
       {/* Bottom Section */}
-      <div className="border-t border-primary-foreground/20 py-8">
+      <div className="border-t border-primary-foreground/20 py-4 md:py-8">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center gap-3 mb-4 md:mb-0">
