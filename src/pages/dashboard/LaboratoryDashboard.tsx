@@ -566,38 +566,40 @@ const LaboratoryDashboard = () => {
                       Monthly testing volume and average completion time
                     </CardDescription>
                   </CardHeader>
-                  <CardContent>
-                    <ChartContainer
-                      config={{
-                        testsCompleted: {
-                          label: "Tests Completed",
-                          color: "hsl(var(--primary))",
-                        },
-                        averageDays: {
-                          label: "Average Days",
-                          color: "hsl(var(--secondary))",
-                        },
-                      }}
-                      className="h-[300px]"
-                    >
-                      <ResponsiveContainer width="100%" height="100%">
-                        <ComposedChart data={testingTimelineData}>
-                          <XAxis dataKey="month" />
-                          <YAxis yAxisId="left" />
-                          <YAxis yAxisId="right" orientation="right" />
-                          <ChartTooltip content={<ChartTooltipContent />} />
-                          <Bar yAxisId="left" dataKey="testsCompleted" fill="var(--color-testsCompleted)" />
-                          <Line 
-                            yAxisId="right" 
-                            type="monotone" 
-                            dataKey="averageDays" 
-                            stroke="var(--color-averageDays)" 
-                            strokeWidth={2}
-                            dot={{ fill: "var(--color-averageDays)" }}
-                          />
-                        </ComposedChart>
-                      </ResponsiveContainer>
-                    </ChartContainer>
+                  <CardContent className="p-3 sm:p-6">
+                    <div className="w-full overflow-hidden">
+                      <ChartContainer
+                        config={{
+                          testsCompleted: {
+                            label: "Tests Completed",
+                            color: "hsl(var(--primary))",
+                          },
+                          averageDays: {
+                            label: "Average Days",
+                            color: "hsl(var(--secondary))",
+                          },
+                        }}
+                        className="h-[250px] sm:h-[300px] w-full"
+                      >
+                        <ResponsiveContainer width="100%" height="100%">
+                          <ComposedChart data={testingTimelineData} margin={{ left: -20, right: 0, top: 5, bottom: 5 }}>
+                            <XAxis dataKey="month" fontSize={12} />
+                            <YAxis yAxisId="left" fontSize={12} />
+                            <YAxis yAxisId="right" orientation="right" fontSize={12} />
+                            <ChartTooltip content={<ChartTooltipContent />} />
+                            <Bar yAxisId="left" dataKey="testsCompleted" fill="var(--color-testsCompleted)" />
+                            <Line 
+                              yAxisId="right" 
+                              type="monotone" 
+                              dataKey="averageDays" 
+                              stroke="var(--color-averageDays)" 
+                              strokeWidth={2}
+                              dot={{ fill: "var(--color-averageDays)" }}
+                            />
+                          </ComposedChart>
+                        </ResponsiveContainer>
+                      </ChartContainer>
+                    </div>
                   </CardContent>
                 </Card>
               </div>
