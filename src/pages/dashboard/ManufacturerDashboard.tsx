@@ -214,34 +214,40 @@ const ManufacturerDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background p-4 md:p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-primary mb-2">{t('manufacturerPortal')}</h1>
-          <p className="text-muted-foreground">
+    <div className="min-h-screen bg-background p-3 sm:p-4 md:p-6">
+      <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-primary mb-2 leading-tight">{t('manufacturerPortal')}</h1>
+          <p className="text-sm sm:text-base text-muted-foreground">
             Combine verified batches, create products, and generate QR codes for transparency
           </p>
         </div>
 
-        <Tabs defaultValue="verified-batches" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="verified-batches" className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4" />
-              {t('verifiedBatches')}
-            </TabsTrigger>
-            <TabsTrigger value="create-product" className="flex items-center gap-2">
-              <Plus className="h-4 w-4" />
-              {t('createProductBatch')}
-            </TabsTrigger>
-            <TabsTrigger value="product-batches" className="flex items-center gap-2">
-              <Package className="h-4 w-4" />
-              Product Batches
-            </TabsTrigger>
-            <TabsTrigger value="analytics" className="flex items-center gap-2">
-              <Factory className="h-4 w-4" />
-              Analytics
-            </TabsTrigger>
-          </TabsList>
+        <Tabs defaultValue="verified-batches" className="space-y-4 sm:space-y-6">
+          <div className="overflow-x-auto scrollbar-hide">
+            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 min-w-[320px]">
+              <TabsTrigger value="verified-batches" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
+                <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden xs:inline">{t('verifiedBatches')}</span>
+                <span className="xs:hidden">Batches</span>
+              </TabsTrigger>
+              <TabsTrigger value="create-product" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
+                <Plus className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden xs:inline">{t('createProductBatch')}</span>
+                <span className="xs:hidden">Create</span>
+              </TabsTrigger>
+              <TabsTrigger value="product-batches" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
+                <Package className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden xs:inline">Product Batches</span>
+                <span className="xs:hidden">Products</span>
+              </TabsTrigger>
+              <TabsTrigger value="analytics" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
+                <Factory className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden xs:inline">Analytics</span>
+                <span className="xs:hidden">Data</span>
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="verified-batches">
             <div className="space-y-4">

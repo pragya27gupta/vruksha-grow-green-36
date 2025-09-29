@@ -342,30 +342,35 @@ const FarmerDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background p-4 md:p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-primary mb-2">{t('farmerPortal')}</h1>
-          <p className="text-muted-foreground">
+    <div className="min-h-screen bg-background p-3 sm:p-4 md:p-6">
+      <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-primary mb-2 leading-tight">{t('farmerPortal')}</h1>
+          <p className="text-sm sm:text-base text-muted-foreground">
             Record your harvests, track quality, and build credibility in the supply chain
           </p>
         </div>
 
-        <Tabs defaultValue="new-harvest" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="new-harvest" className="flex items-center gap-2">
-              <Plus className="h-4 w-4" />
-              {t('newHarvest')}
-            </TabsTrigger>
-            <TabsTrigger value="past-harvests" className="flex items-center gap-2">
-              <Eye className="h-4 w-4" />
-              {t('pastHarvests')}
-            </TabsTrigger>
-            <TabsTrigger value="analytics" className="flex items-center gap-2">
-              <Calendar className="h-4 w-4" />
-              Analytics
-            </TabsTrigger>
-          </TabsList>
+        <Tabs defaultValue="new-harvest" className="space-y-4 sm:space-y-6">
+          <div className="overflow-x-auto scrollbar-hide">
+            <TabsList className="grid w-full grid-cols-3 min-w-[320px]">
+              <TabsTrigger value="new-harvest" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
+                <Plus className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden xs:inline">{t('newHarvest')}</span>
+                <span className="xs:hidden">New</span>
+              </TabsTrigger>
+              <TabsTrigger value="past-harvests" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
+                <Eye className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden xs:inline">{t('pastHarvests')}</span>
+                <span className="xs:hidden">Past</span>
+              </TabsTrigger>
+              <TabsTrigger value="analytics" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
+                <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden xs:inline">Analytics</span>
+                <span className="xs:hidden">Data</span>
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="new-harvest">
             <Card>
@@ -379,15 +384,15 @@ const FarmerDashboard = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleSubmitHarvest} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <form onSubmit={handleSubmitHarvest} className="space-y-4 sm:space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="cropSpecies">{t('cropSpecies')} *</Label>
                       <Select
                         value={harvestForm.cropSpecies}
                         onValueChange={(value) => setHarvestForm({ ...harvestForm, cropSpecies: value })}
                       >
-                        <SelectTrigger>
+                        <SelectTrigger className="h-10 sm:h-11">
                           <SelectValue placeholder="Select crop/species" />
                         </SelectTrigger>
                         <SelectContent>
@@ -415,6 +420,7 @@ const FarmerDashboard = () => {
                         value={harvestForm.weight}
                         onChange={(e) => setHarvestForm({ ...harvestForm, weight: e.target.value })}
                         placeholder="25.5"
+                        className="h-10 sm:h-11"
                       />
                     </div>
 
@@ -429,6 +435,7 @@ const FarmerDashboard = () => {
                         value={harvestForm.quantity}
                         onChange={(e) => setHarvestForm({ ...harvestForm, quantity: e.target.value })}
                         placeholder="100"
+                        className="h-10 sm:h-11"
                       />
                     </div>
 
@@ -443,8 +450,9 @@ const FarmerDashboard = () => {
                           value={harvestForm.location}
                           onChange={(e) => setHarvestForm({ ...harvestForm, location: e.target.value })}
                           placeholder="Will auto-fill with GPS"
+                          className="h-10 sm:h-11"
                         />
-                        <Button type="button" variant="outline" size="icon" onClick={getCurrentLocation} className="shrink-0">
+                        <Button type="button" variant="outline" size="icon" onClick={getCurrentLocation} className="shrink-0 h-10 w-10 sm:h-11 sm:w-11">
                           <MapPin className="h-4 w-4" />
                         </Button>
                       </div>
@@ -469,10 +477,10 @@ const FarmerDashboard = () => {
                         type="button"
                         variant="outline"
                         onClick={startCamera}
-                        className="flex items-center gap-2"
+                        className="flex items-center gap-2 h-10 sm:h-11"
                       >
                         <Camera className="h-4 w-4" />
-                        📸 Take Photo
+                        <span className="text-sm">📸 Take Photo</span>
                       </Button>
                       <Button
                         type="button"
@@ -487,46 +495,68 @@ const FarmerDashboard = () => {
                           };
                           fileInput.click();
                         }}
-                        className="flex items-center gap-2"
+                        className="flex items-center gap-2 h-10 sm:h-11"
                       >
                         <Upload className="h-4 w-4" />
-                        📁 Upload Photo
+                        <span className="text-sm">📁 Upload Photo</span>
                       </Button>
-                      {harvestForm.photo && (
-                        <div className="col-span-2 text-sm text-muted-foreground p-2 bg-muted rounded-md">
-                          ✅ {harvestForm.photo.name}
-                        </div>
-                      )}
+                    </div>
+                  </div>
+                  
+                  {harvestForm.photo && (
+                    <div className="text-sm text-muted-foreground p-2 bg-muted rounded-md">
+                      ✅ {harvestForm.photo.name}
+                    </div>
+                  )}
+
+                  <div className="space-y-2">
+                    <Label htmlFor="notes" className="flex items-center gap-2">
+                      <Mic className="h-4 w-4 text-muted-foreground" />
+                      {t('notes')} (Optional)
+                    </Label>
+                    <div className="relative">
+                      <Textarea
+                        id="notes"
+                        value={harvestForm.notes}
+                        onChange={(e) => setHarvestForm({ ...harvestForm, notes: e.target.value })}
+                        placeholder="Add any additional notes about the harvest..."
+                        rows={3}
+                        className="resize-none"
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={startVoiceInput}
+                        disabled={isListening}
+                        className="absolute bottom-2 right-2 h-8 w-8 p-0"
+                      >
+                        <Mic className={`h-4 w-4 ${isListening ? 'text-red-500 animate-pulse' : ''}`} />
+                      </Button>
                     </div>
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="notes">Notes</Label>
-                    <Textarea
-                      id="notes"
-                      value={harvestForm.notes}
-                      onChange={(e) => setHarvestForm({ ...harvestForm, notes: e.target.value })}
-                      placeholder="Additional notes about the harvest..."
-                      rows={3}
-                    />
-                  </div>
-
-                  <Separator />
-
-                  <div className="flex gap-4">
-                    <Button type="submit" className="flex items-center gap-2">
-                      <Upload className="h-4 w-4" />
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
+                    <Button type="submit" className="flex items-center gap-2 h-11">
+                      <Package className="h-4 w-4" />
                       {t('recordHarvest')}
                     </Button>
-                    <Button 
-                      type="button" 
-                      variant="outline" 
-                      className={`flex items-center gap-2 ${isListening ? 'bg-red-50 border-red-300' : ''}`}
-                      onClick={startVoiceInput}
-                      disabled={isListening}
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => {
+                        setHarvestForm({
+                          cropSpecies: '',
+                          weight: '',
+                          quantity: '',
+                          location: '',
+                          notes: '',
+                          photo: null
+                        });
+                      }}
+                      className="h-11"
                     >
-                      <Mic className={`h-4 w-4 ${isListening ? 'text-red-500 animate-pulse' : ''}`} />
-                      {isListening ? 'Listening...' : t('voiceInput')}
+                      Clear Form
                     </Button>
                   </div>
                 </form>

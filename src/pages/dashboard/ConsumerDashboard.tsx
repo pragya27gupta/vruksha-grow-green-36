@@ -213,11 +213,11 @@ const ConsumerDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background p-4 md:p-6">
-      <div className="max-w-6xl mx-auto space-y-6">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-primary mb-2">{t('consumerPortal')}</h1>
-          <p className="text-muted-foreground">
+    <div className="min-h-screen bg-background p-3 sm:p-4 md:p-6">
+      <div className="max-w-6xl mx-auto space-y-4 sm:space-y-6">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-primary mb-2 leading-tight">{t('consumerPortal')}</h1>
+          <p className="text-sm sm:text-base text-muted-foreground">
             Scan QR codes to trace your product's journey from farm to shelf
           </p>
         </div>
