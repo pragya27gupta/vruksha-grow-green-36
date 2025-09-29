@@ -233,46 +233,49 @@ ${csvContent}
   return (
     <div className="space-y-6">
       {/* Header with Filters */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-bold flex items-center gap-2">
-            <FileText className="h-6 w-6" />
+          <h2 className="text-xl sm:text-2xl font-bold flex items-center gap-2">
+            <FileText className="h-5 w-5 sm:h-6 sm:w-6" />
             Compliance Reports
           </h2>
-          <p className="text-muted-foreground">Comprehensive compliance monitoring and reporting</p>
+          <p className="text-sm sm:text-base text-muted-foreground">Comprehensive compliance monitoring and reporting</p>
         </div>
-        <div className="flex gap-2">
-          <Select value={selectedPeriod} onValueChange={handlePeriodChange}>
-            <SelectTrigger className="w-32">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="weekly">Weekly</SelectItem>
-              <SelectItem value="monthly">Monthly</SelectItem>
-              <SelectItem value="quarterly">Quarterly</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select value={selectedCategory} onValueChange={handleCategoryChange}>
-            <SelectTrigger className="w-40">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Categories</SelectItem>
-              <SelectItem value="organic">Organic Certification</SelectItem>
-              <SelectItem value="pesticide">Pesticide Usage</SelectItem>
-              <SelectItem value="labeling">Product Labeling</SelectItem>
-              <SelectItem value="traceability">Traceability</SelectItem>
-            </SelectContent>
-          </Select>
-          <Button className="gap-2" onClick={handleExport}>
+        <div className="flex flex-col sm:flex-row gap-2 w-full lg:w-auto">
+          <div className="flex gap-2">
+            <Select value={selectedPeriod} onValueChange={handlePeriodChange}>
+              <SelectTrigger className="w-full sm:w-32">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="weekly">Weekly</SelectItem>
+                <SelectItem value="monthly">Monthly</SelectItem>
+                <SelectItem value="quarterly">Quarterly</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select value={selectedCategory} onValueChange={handleCategoryChange}>
+              <SelectTrigger className="w-full sm:w-40">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Categories</SelectItem>
+                <SelectItem value="organic">Organic Certification</SelectItem>
+                <SelectItem value="pesticide">Pesticide Usage</SelectItem>
+                <SelectItem value="labeling">Product Labeling</SelectItem>
+                <SelectItem value="traceability">Traceability</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <Button className="gap-2 w-full sm:w-auto" onClick={handleExport}>
             <Download className="h-4 w-4" />
-            Export
+            <span className="hidden sm:inline">Export</span>
+            <span className="sm:hidden">Export</span>
           </Button>
         </div>
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <Card>
           <CardHeader className="pb-2">
             <CardDescription className="flex items-center gap-2">
@@ -373,9 +376,9 @@ ${csvContent}
           ) : (
             <div className="space-y-4">
               {reportData.recentReports.map((report) => (
-              <div key={report.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
+              <div key={report.id} className="flex flex-col lg:flex-row lg:items-center lg:justify-between p-3 sm:p-4 border rounded-lg hover:bg-accent/50 transition-colors gap-3 lg:gap-4">
+                <div className="flex-1 space-y-2 lg:space-y-3">
+                  <div className="flex flex-wrap items-center gap-2">
                     <Badge variant="outline" className="font-mono text-xs">{report.id}</Badge>
                     <Badge variant={report.status === 'Completed' ? 'secondary' : report.status === 'In Progress' ? 'default' : 'outline'}>
                       {report.status}
@@ -384,28 +387,30 @@ ${csvContent}
                       {report.severity}
                     </Badge>
                   </div>
-                  <h4 className="font-semibold">{report.title}</h4>
-                  <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
+                  <h4 className="font-semibold text-sm sm:text-base break-words">{report.title}</h4>
+                  <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm text-muted-foreground">
                     <span>{report.type}</span>
-                    <span>•</span>
+                    <span className="hidden sm:inline">•</span>
                     <span>{report.date}</span>
-                    <span>•</span>
+                    <span className="hidden sm:inline">•</span>
                     <span className={`font-medium ${report.violations > 0 ? 'text-red-600' : 'text-green-600'}`}>
                       {report.violations} violations
                     </span>
-                    <span>•</span>
+                    <span className="hidden sm:inline">•</span>
                     <span className={`font-medium ${report.complianceScore >= 90 ? 'text-green-600' : report.complianceScore >= 70 ? 'text-yellow-600' : 'text-red-600'}`}>
                       {report.complianceScore}% compliance
                     </span>
                   </div>
                 </div>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm" onClick={() => handleDownloadReport(report.id, report.title)}>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <Button variant="outline" size="sm" onClick={() => handleDownloadReport(report.id, report.title)} className="w-full sm:w-auto">
                     <Download className="h-4 w-4 mr-1" />
-                    Download
+                    <span className="hidden sm:inline">Download</span>
+                    <span className="sm:hidden">Download</span>
                   </Button>
-                  <Button variant="outline" size="sm" onClick={() => handleViewDetails(report.id)}>
-                    View Details
+                  <Button variant="outline" size="sm" onClick={() => handleViewDetails(report.id)} className="w-full sm:w-auto">
+                    <span className="hidden sm:inline">View Details</span>
+                    <span className="sm:hidden">Details</span>
                   </Button>
                 </div>
               </div>
@@ -422,27 +427,29 @@ ${csvContent}
           <CardDescription>Monthly compliance reporting and violation trends</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-6 gap-4">
-            {reportData.trends.monthlyReports.map((month, index) => (
-              <div key={month.month} className="text-center">
-                <div className="relative mb-2">
-                  <div className="h-24 flex items-end justify-center">
-                    <div 
-                      className="w-8 bg-primary rounded-t" 
-                      style={{ height: `${(month.reports / 25) * 100}%` }}
-                    ></div>
+          <div className="overflow-x-auto scrollbar-hide">
+            <div className="grid grid-cols-6 gap-2 sm:gap-4 min-w-[400px]">
+              {reportData.trends.monthlyReports.map((month, index) => (
+                <div key={month.month} className="text-center">
+                  <div className="relative mb-2">
+                    <div className="h-16 sm:h-24 flex items-end justify-center">
+                      <div 
+                        className="w-6 sm:w-8 bg-primary rounded-t" 
+                        style={{ height: `${(month.reports / 25) * 100}%` }}
+                      ></div>
+                    </div>
+                    <div className="h-12 sm:h-16 flex items-end justify-center mt-1">
+                      <div 
+                        className="w-4 sm:w-6 bg-red-500 rounded-t" 
+                        style={{ height: `${(month.violations / 6) * 100}%` }}
+                      ></div>
+                    </div>
                   </div>
-                  <div className="h-16 flex items-end justify-center mt-1">
-                    <div 
-                      className="w-6 bg-red-500 rounded-t" 
-                      style={{ height: `${(month.violations / 6) * 100}%` }}
-                    ></div>
-                  </div>
+                  <p className="text-xs font-medium">{month.month}</p>
+                  <p className="text-xs text-muted-foreground">{month.reports}R / {month.violations}V</p>
                 </div>
-                <p className="text-xs font-medium">{month.month}</p>
-                <p className="text-xs text-muted-foreground">{month.reports}R / {month.violations}V</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
           <div className="flex justify-center gap-6 mt-4 text-sm">
             <div className="flex items-center gap-2">
