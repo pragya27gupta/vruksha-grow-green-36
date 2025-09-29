@@ -255,19 +255,19 @@ const LaboratoryDashboard = () => {
 
           <TabsContent value="samples">
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-semibold">{t('pendingSamples')}</h2>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                <h2 className="text-xl sm:text-2xl font-semibold">{t('pendingSamples')}</h2>
                 <Badge variant="outline">{samples.length} samples</Badge>
               </div>
 
               <div className="grid gap-4">
                 {samples.map((sample) => (
                   <Card key={sample.id}>
-                    <CardContent className="p-6">
-                      <div className="flex items-start justify-between mb-4">
-                        <div>
-                          <h3 className="font-semibold text-lg">Sample {sample.id}</h3>
-                          <p className="text-sm text-muted-foreground">
+                    <CardContent className="p-3 sm:p-4 md:p-6">
+                      <div className="flex flex-col sm:flex-row items-start justify-between gap-3 mb-4">
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-base sm:text-lg truncate">Sample {sample.id}</h3>
+                          <p className="text-xs sm:text-sm text-muted-foreground break-words">
                             {sample.cropSpecies} • Batch: {sample.batchId} • By: {sample.submittedBy}
                           </p>
                         </div>
@@ -275,25 +275,25 @@ const LaboratoryDashboard = () => {
                       </div>
 
                       {sample.testResults && (
-                        <div className="bg-muted/50 rounded-lg p-4 mb-4">
+                        <div className="bg-muted/50 rounded-lg p-3 sm:p-4 mb-4">
                           <div className="flex items-center gap-2 mb-3">
                             {getTestStatusIcon(sample.testResults.overallStatus)}
-                            <h4 className="font-medium">Test Results</h4>
+                            <h4 className="font-medium text-sm sm:text-base">Test Results</h4>
                             <Badge variant={sample.testResults.overallStatus === 'pass' ? 'default' : 'destructive'}>
                               {sample.testResults.overallStatus.toUpperCase()}
                             </Badge>
                           </div>
                           
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 text-xs sm:text-sm">
                             <div>
                               <span className="font-medium">Moisture Content:</span>
                               <div className="flex items-center gap-2">
                                 <span>{sample.testResults.moistureContent}%</span>
                                 {sample.testResults.moistureContent >= testThresholds.moistureContent.min && 
                                  sample.testResults.moistureContent <= testThresholds.moistureContent.max ? (
-                                  <CheckCircle className="h-4 w-4 text-green-600" />
+                                  <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 text-green-600" />
                                 ) : (
-                                  <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                                  <AlertTriangle className="h-3 w-3 sm:h-4 sm:w-4 text-yellow-600" />
                                 )}
                               </div>
                             </div>
@@ -302,55 +302,58 @@ const LaboratoryDashboard = () => {
                               <div className="flex items-center gap-2">
                                 <span>{sample.testResults.pesticideResidue} ppm</span>
                                 {sample.testResults.pesticideResidue <= testThresholds.pesticideResidue.max ? (
-                                  <CheckCircle className="h-4 w-4 text-green-600" />
+                                  <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 text-green-600" />
                                 ) : (
-                                  <XCircle className="h-4 w-4 text-red-600" />
+                                  <XCircle className="h-3 w-3 sm:h-4 sm:w-4 text-red-600" />
                                 )}
                               </div>
                             </div>
-                            <div>
+                            <div className="sm:col-span-2 lg:col-span-1">
                               <span className="font-medium">DNA Barcode:</span>
-                              <div>{sample.testResults.dnaBarcodeResult}</div>
+                              <div className="break-words">{sample.testResults.dnaBarcodeResult}</div>
                             </div>
                           </div>
                           
                           {sample.testResults.notes && (
-                            <p className="text-sm text-muted-foreground mt-3 italic">
+                            <p className="text-xs sm:text-sm text-muted-foreground mt-3 italic">
                               "{sample.testResults.notes}"
                             </p>
                           )}
                         </div>
                       )}
 
-                      <div className="flex gap-2">
+                      <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2">
                         <Button 
                           variant="outline" 
                           size="sm" 
                           onClick={() => handleViewDetails(sample)}
-                          className="flex items-center gap-2"
+                          className="flex items-center gap-2 text-xs"
                         >
-                          <Eye className="h-4 w-4" />
-                          View Details
+                          <Eye className="h-3 w-3 sm:h-4 sm:w-4" />
+                          <span className="hidden sm:inline">View Details</span>
+                          <span className="sm:hidden">View</span>
                         </Button>
                         {sample.status === 'completed' ? (
                           <Button 
                             variant="outline" 
                             size="sm" 
                             onClick={() => handleDownloadCertificate(sample)}
-                            className="flex items-center gap-2"
+                            className="flex items-center gap-2 text-xs"
                           >
-                            <Download className="h-4 w-4" />
-                            Download Certificate
+                            <Download className="h-3 w-3 sm:h-4 sm:w-4" />
+                            <span className="hidden sm:inline">Download Certificate</span>
+                            <span className="sm:hidden">Download</span>
                           </Button>
                         ) : (
                           <Button 
                             variant="outline" 
                             size="sm"
                             onClick={() => handleStartTesting(sample)}
-                            className="flex items-center gap-2"
+                            className="flex items-center gap-2 text-xs"
                           >
-                            <Play className="h-4 w-4" />
-                            Start Testing
+                            <Play className="h-3 w-3 sm:h-4 sm:w-4" />
+                            <span className="hidden sm:inline">Start Testing</span>
+                            <span className="sm:hidden">Start</span>
                           </Button>
                         )}
                       </div>
@@ -363,17 +366,17 @@ const LaboratoryDashboard = () => {
 
           <TabsContent value="upload-test">
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Microscope className="h-5 w-5" />
+              <CardHeader className="p-4 sm:p-6">
+                <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
+                  <Microscope className="h-4 w-4 sm:h-5 sm:w-5" />
                   {t('qualityTest')} Results
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-xs sm:text-sm">
                   Upload test results and validate against quality thresholds
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <form onSubmit={handleSubmitTest} className="space-y-6">
+              <CardContent className="p-4 sm:p-6">
+                <form onSubmit={handleSubmitTest} className="space-y-4 sm:space-y-6">
                   <div className="space-y-2">
                     <Label htmlFor="sampleId">Select Sample *</Label>
                     <Select
@@ -473,12 +476,12 @@ const LaboratoryDashboard = () => {
                     />
                   </div>
 
-                  <div className="flex gap-4">
-                    <Button type="submit" className="flex items-center gap-2">
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                    <Button type="submit" className="flex items-center gap-2 justify-center">
                       <ClipboardCheck className="h-4 w-4" />
                       Submit Test Results
                     </Button>
-                    <Button type="button" variant="outline">
+                    <Button type="button" variant="outline" className="justify-center">
                       Save as Draft
                     </Button>
                   </div>
@@ -488,39 +491,39 @@ const LaboratoryDashboard = () => {
           </TabsContent>
 
           <TabsContent value="analytics">
-            <div className="grid gap-6">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid gap-4 sm:gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 <Card>
-                  <CardHeader className="pb-2">
-                    <CardDescription>Samples Tested</CardDescription>
-                    <CardTitle className="text-3xl">156</CardTitle>
+                  <CardHeader className="pb-2 p-3 sm:p-4">
+                    <CardDescription className="text-xs sm:text-sm">Samples Tested</CardDescription>
+                    <CardTitle className="text-2xl sm:text-3xl">156</CardTitle>
                   </CardHeader>
                 </Card>
                 <Card>
-                  <CardHeader className="pb-2">
-                    <CardDescription>Pass Rate</CardDescription>
-                    <CardTitle className="text-3xl">94.2%</CardTitle>
+                  <CardHeader className="pb-2 p-3 sm:p-4">
+                    <CardDescription className="text-xs sm:text-sm">Pass Rate</CardDescription>
+                    <CardTitle className="text-2xl sm:text-3xl">94.2%</CardTitle>
                   </CardHeader>
                 </Card>
                 <Card>
-                  <CardHeader className="pb-2">
-                    <CardDescription>Avg Test Time</CardDescription>
-                    <CardTitle className="text-3xl">2.1d</CardTitle>
+                  <CardHeader className="pb-2 p-3 sm:p-4">
+                    <CardDescription className="text-xs sm:text-sm">Avg Test Time</CardDescription>
+                    <CardTitle className="text-2xl sm:text-3xl">2.1d</CardTitle>
                   </CardHeader>
                 </Card>
                 <Card>
-                  <CardHeader className="pb-2">
-                    <CardDescription>Pending Tests</CardDescription>
-                    <CardTitle className="text-3xl">8</CardTitle>
+                  <CardHeader className="pb-2 p-3 sm:p-4">
+                    <CardDescription className="text-xs sm:text-sm">Pending Tests</CardDescription>
+                    <CardTitle className="text-2xl sm:text-3xl">8</CardTitle>
                   </CardHeader>
                 </Card>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                 <Card>
-                  <CardHeader>
-                    <CardTitle>Quality Distribution</CardTitle>
-                    <CardDescription>
+                  <CardHeader className="p-4 sm:p-6">
+                    <CardTitle className="text-base sm:text-lg">Quality Distribution</CardTitle>
+                    <CardDescription className="text-xs sm:text-sm">
                       Test results breakdown by status
                     </CardDescription>
                   </CardHeader>
@@ -557,9 +560,9 @@ const LaboratoryDashboard = () => {
                 </Card>
 
                 <Card>
-                  <CardHeader>
-                    <CardTitle>Testing Timeline</CardTitle>
-                    <CardDescription>
+                  <CardHeader className="p-4 sm:p-6">
+                    <CardTitle className="text-base sm:text-lg">Testing Timeline</CardTitle>
+                    <CardDescription className="text-xs sm:text-sm">
                       Monthly testing volume and average completion time
                     </CardDescription>
                   </CardHeader>
@@ -604,17 +607,17 @@ const LaboratoryDashboard = () => {
 
         {/* View Details Modal */}
         <Dialog open={isViewDetailsOpen} onOpenChange={setIsViewDetailsOpen}>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>Sample Details - {selectedSample?.id}</DialogTitle>
-              <DialogDescription>
+              <DialogTitle className="text-base sm:text-lg">Sample Details - {selectedSample?.id}</DialogTitle>
+              <DialogDescription className="text-xs sm:text-sm">
                 Comprehensive sample information and test history
               </DialogDescription>
             </DialogHeader>
             
             {selectedSample && (
-              <div className="space-y-6">
-                <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-4 sm:space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div>
                     <Label className="text-sm font-medium">Batch ID</Label>
                     <p className="text-sm text-muted-foreground">{selectedSample.batchId}</p>
@@ -645,7 +648,7 @@ const LaboratoryDashboard = () => {
                       <TestTube className="h-4 w-4" />
                       Test Results
                     </h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm">
                       <div>
                         <Label>Moisture Content</Label>
                         <p className="flex items-center gap-2">
@@ -701,10 +704,10 @@ const LaboratoryDashboard = () => {
 
         {/* Start Testing Modal */}
         <Dialog open={isStartTestingOpen} onOpenChange={setIsStartTestingOpen}>
-          <DialogContent className="max-w-xl">
+          <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>Start Testing - {selectedSample?.id}</DialogTitle>
-              <DialogDescription>
+              <DialogTitle className="text-base sm:text-lg">Start Testing - {selectedSample?.id}</DialogTitle>
+              <DialogDescription className="text-xs sm:text-sm">
                 Begin quality testing process for this sample
               </DialogDescription>
             </DialogHeader>
@@ -713,7 +716,7 @@ const LaboratoryDashboard = () => {
               <div className="space-y-4">
                 <div className="bg-muted/50 rounded-lg p-4">
                   <h4 className="font-medium mb-2">Sample Information</h4>
-                  <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm">
                     <div>
                       <span className="font-medium">Crop:</span> {selectedSample.cropSpecies}
                     </div>
