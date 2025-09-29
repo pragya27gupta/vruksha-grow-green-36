@@ -21,7 +21,8 @@ import {
   Eye,
   Calendar,
   Weight,
-  Package
+  Package,
+  Download
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
@@ -78,21 +79,21 @@ const FarmerDashboard = () => {
   ]);
 
   const cropOptions = [
-    { value: 'Turmeric', icon: '🌱', color: 'bg-brand-yellow/20 text-brand-yellow border-brand-yellow/30' },
-    { value: 'Ashwagandha', icon: '🌿', color: 'bg-brand-green/20 text-brand-green border-brand-green/30' },
-    { value: 'Tulsi', icon: '🍃', color: 'bg-trust-organic/20 text-trust-organic border-trust-organic/30' },
-    { value: 'Neem', icon: '🌱', color: 'bg-brand-green-light/20 text-brand-green-light border-brand-green-light/30' },
-    { value: 'Aloe Vera', icon: '🌿', color: 'bg-trust-quality/20 text-trust-quality border-trust-quality/30' },
-    { value: 'Ginger', icon: '🫚', color: 'bg-brand-orange/20 text-brand-orange border-brand-orange/30' },
-    { value: 'Cardamom', icon: '🌱', color: 'bg-trust-verified/20 text-trust-verified border-trust-verified/30' },
-    { value: 'Black Pepper', icon: '⚫', color: 'bg-muted/40 text-muted-foreground border-muted/60' },
-    { value: 'Cinnamon', icon: '🟤', color: 'bg-brand-red/20 text-brand-red border-brand-red/30' },
-    { value: 'Clove', icon: '🌰', color: 'bg-brand-black/10 text-brand-black border-brand-black/20' },
-    { value: 'Fenugreek', icon: '🌱', color: 'bg-brand-yellow/20 text-brand-yellow border-brand-yellow/30' },
-    { value: 'Cumin', icon: '🌾', color: 'bg-brand-orange/20 text-brand-orange border-brand-orange/30' },
-    { value: 'Coriander', icon: '🌿', color: 'bg-brand-green/20 text-brand-green border-brand-green/30' },
-    { value: 'Fennel', icon: '🌱', color: 'bg-brand-green-light/20 text-brand-green-light border-brand-green-light/30' },
-    { value: 'Mustard', icon: '🌼', color: 'bg-brand-yellow/20 text-brand-yellow border-brand-yellow/30' }
+    { value: 'Turmeric', icon: '🌱' },
+    { value: 'Ashwagandha', icon: '🌿' },
+    { value: 'Tulsi', icon: '🍃' },
+    { value: 'Neem', icon: '🌱' },
+    { value: 'Aloe Vera', icon: '🌿' },
+    { value: 'Ginger', icon: '🫚' },
+    { value: 'Cardamom', icon: '🌱' },
+    { value: 'Black Pepper', icon: '⚫' },
+    { value: 'Cinnamon', icon: '🟤' },
+    { value: 'Clove', icon: '🌰' },
+    { value: 'Fenugreek', icon: '🌱' },
+    { value: 'Cumin', icon: '🌾' },
+    { value: 'Coriander', icon: '🌿' },
+    { value: 'Fennel', icon: '🌱' },
+    { value: 'Mustard', icon: '🌼' }
   ];
 
   const handleSubmitHarvest = (e: React.FormEvent) => {
@@ -281,16 +282,12 @@ const FarmerDashboard = () => {
   const generateCertificate = async (harvest: HarvestRecord) => {
     const pdf = new jsPDF();
     
-    // Header
     pdf.setFontSize(20);
-    pdf.setTextColor(40, 120, 40);
     pdf.text('VrukshaChain Certificate', 20, 30);
     
     pdf.setFontSize(16);
-    pdf.setTextColor(0, 0, 0);
     pdf.text('Harvest Authenticity Certificate', 20, 45);
     
-    // Certificate content
     pdf.setFontSize(12);
     pdf.text(`Certificate ID: VC-${harvest.id}`, 20, 65);
     pdf.text(`Issue Date: ${new Date().toLocaleDateString()}`, 20, 75);
@@ -309,17 +306,13 @@ const FarmerDashboard = () => {
       pdf.text(splitNotes, 30, 180);
     }
     
-    // Footer
     pdf.setFontSize(10);
-    pdf.setTextColor(100, 100, 100);
     pdf.text('This certificate is digitally generated and verifies the authenticity', 20, 250);
     pdf.text('of the harvest record in the VrukshaChain traceability system.', 20, 260);
     
-    // QR Code placeholder
     pdf.rect(150, 200, 40, 40);
     pdf.text('QR Code', 165, 225);
     
-    // Save the PDF
     pdf.save(`VrukshaChain-Certificate-${harvest.id}.pdf`);
     
     toast({
@@ -330,114 +323,99 @@ const FarmerDashboard = () => {
 
   const getStatusBadge = (status: string) => {
     const variants = {
-      recorded: 'bg-brand-blue/20 text-brand-blue border-brand-blue/30',
-      verified: 'bg-trust-verified/20 text-trust-verified border-trust-verified/30',
-      processed: 'bg-brand-green/20 text-brand-green border-brand-green/30'
+      recorded: 'secondary',
+      verified: 'default',
+      processed: 'outline'
     };
     return (
-      <Badge className={`${variants[status as keyof typeof variants]} border`} variant="outline">
+      <Badge variant={variants[status as keyof typeof variants] as "default" | "secondary" | "destructive" | "outline"}>
         {status.charAt(0).toUpperCase() + status.slice(1)}
       </Badge>
     );
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
-      <div className="max-w-7xl mx-auto p-3 sm:p-4 md:p-6 space-y-6">
-        {/* Enhanced Header Section */}
-         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-brand-green via-brand-green-light to-trust-organic p-6 md:p-8 shadow-elegant">
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg width=%2760%27 height=%2760%27 viewBox=%270 0 60 60%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cg fill=%27none%27 fill-rule=%27evenodd%27%3E%3Cg fill=%27%23ffffff%27 fill-opacity=%270.1%27%3E%3Ccircle cx=%277%27 cy=%277%27 r=%272%27/%3E%3Ccircle cx=%2727%27 cy=%277%27 r=%272%27/%3E%3Ccircle cx=%2747%27 cy=%277%27 r=%272%27/%3E%3Ccircle cx=%277%27 cy=%2727%27 r=%272%27/%3E%3Ccircle cx=%2727%27 cy=%2727%27 r=%272%27/%3E%3Ccircle cx=%2747%27 cy=%2727%27 r=%272%27/%3E%3Ccircle cx=%277%27 cy=%2747%27 r=%272%27/%3E%3Ccircle cx=%2727%27 cy=%2747%27 r=%272%27/%3E%3Ccircle cx=%2747%27 cy=%2747%27 r=%272%27/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20"></div>
-          <div className="relative z-10">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-sm">
-                <Package className="h-8 w-8 text-white" />
-              </div>
-              <div>
-                <h1 className="text-2xl sm:text-3xl font-bold text-white mb-1 leading-tight">
-                  {t('farmerPortal')}
-                </h1>
-                <p className="text-white/90 text-sm sm:text-base">
-                  Record harvests, track quality, build supply chain credibility
-                </p>
-              </div>
+    <div className="min-h-screen bg-background">
+      <div className="max-w-6xl mx-auto p-4 md:p-6 space-y-6">
+        {/* Header Section */}
+        <div className="bg-card rounded-lg border p-6">
+          <div className="flex items-center gap-4 mb-6">
+            <div className="p-3 bg-accent rounded-lg">
+              <Package className="h-6 w-6 text-accent-foreground" />
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-              {[
-                { label: 'Total Harvests', value: harvests.length.toString(), icon: Package },
-                { label: 'Verified', value: harvests.filter(h => h.status === 'verified').length.toString(), icon: Calendar },
-                { label: 'Processed', value: harvests.filter(h => h.status === 'processed').length.toString(), icon: Weight },
-                { label: 'Quality Score', value: '95%', icon: Eye }
-              ].map((stat, idx) => (
-                <div key={idx} className="bg-white/15 backdrop-blur-sm rounded-xl p-3 text-center border border-white/20">
-                  <stat.icon className="h-5 w-5 text-white mx-auto mb-1" />
-                  <div className="text-xl font-bold text-white">{stat.value}</div>
-                  <div className="text-xs text-white/80">{stat.label}</div>
-                </div>
-              ))}
+            <div>
+              <h1 className="text-2xl font-bold text-foreground">
+                {t('farmerPortal')}
+              </h1>
+              <p className="text-muted-foreground">
+                Record harvests and track your production
+              </p>
             </div>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { label: 'Total Harvests', value: harvests.length.toString(), icon: Package },
+              { label: 'Verified', value: harvests.filter(h => h.status === 'verified').length.toString(), icon: Calendar },
+              { label: 'Processed', value: harvests.filter(h => h.status === 'processed').length.toString(), icon: Weight },
+              { label: 'Quality Score', value: '95%', icon: Eye }
+            ].map((stat, idx) => (
+              <div key={idx} className="bg-muted/50 rounded-lg p-4 text-center">
+                <stat.icon className="h-5 w-5 text-muted-foreground mx-auto mb-2" />
+                <div className="text-2xl font-bold text-foreground">{stat.value}</div>
+                <div className="text-sm text-muted-foreground">{stat.label}</div>
+              </div>
+            ))}
           </div>
         </div>
 
-        <Tabs defaultValue="new-harvest" className="space-y-4 sm:space-y-6">
-          <div className="overflow-x-auto scrollbar-hide">
-            <TabsList className="grid w-full grid-cols-3 min-w-[320px]">
-              <TabsTrigger value="new-harvest" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
-                <Plus className="h-3 w-3 sm:h-4 sm:w-4" />
-                <span className="hidden xs:inline">{t('newHarvest')}</span>
-                <span className="xs:hidden">New</span>
-              </TabsTrigger>
-              <TabsTrigger value="past-harvests" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
-                <Eye className="h-3 w-3 sm:h-4 sm:w-4" />
-                <span className="hidden xs:inline">{t('pastHarvests')}</span>
-                <span className="xs:hidden">Past</span>
-              </TabsTrigger>
-              <TabsTrigger value="analytics" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
-                <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
-                <span className="hidden xs:inline">Analytics</span>
-                <span className="xs:hidden">Data</span>
-              </TabsTrigger>
-            </TabsList>
-          </div>
+        <Tabs defaultValue="new-harvest" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="new-harvest" className="flex items-center gap-2">
+              <Plus className="h-4 w-4" />
+              {t('newHarvest')}
+            </TabsTrigger>
+            <TabsTrigger value="past-harvests" className="flex items-center gap-2">
+              <Eye className="h-4 w-4" />
+              {t('pastHarvests')}
+            </TabsTrigger>
+            <TabsTrigger value="analytics" className="flex items-center gap-2">
+              <Calendar className="h-4 w-4" />
+              Analytics
+            </TabsTrigger>
+          </TabsList>
 
           <TabsContent value="new-harvest">
-            <Card className="border-0 shadow-card bg-card/50 backdrop-blur-sm">
-              <CardHeader className="pb-4">
-                <CardTitle className="flex items-center gap-3 text-xl">
-                  <div className="p-2 bg-gradient-to-r from-brand-green to-trust-organic rounded-xl">
-                    <Package className="h-6 w-6 text-white" />
-                  </div>
-                  <span className="bg-gradient-to-r from-brand-green to-trust-organic bg-clip-text text-transparent">
-                    {t('recordHarvest')}
-                  </span>
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Package className="h-5 w-5" />
+                  {t('recordHarvest')}
                 </CardTitle>
-                <CardDescription className="text-base">
-                  Capture harvest details with auto GPS and timestamp validation
+                <CardDescription>
+                  Record your harvest details with location and photos
                 </CardDescription>
               </CardHeader>
-              <CardContent className="pt-0">
+              <CardContent>
                 <form onSubmit={handleSubmitHarvest} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-3">
-                      <Label htmlFor="cropSpecies" className="text-base font-medium flex items-center gap-2">
-                        <Package className="h-4 w-4 text-brand-green" />
+                    <div className="space-y-2">
+                      <Label htmlFor="cropSpecies">
                         {t('cropSpecies')} *
                       </Label>
                       <Select
                         value={harvestForm.cropSpecies}
                         onValueChange={(value) => setHarvestForm({ ...harvestForm, cropSpecies: value })}
                       >
-                        <SelectTrigger className="h-12 bg-background/50 border-2 border-muted hover:border-brand-green/50 transition-all">
+                        <SelectTrigger>
                           <SelectValue placeholder="Select crop/species" />
                         </SelectTrigger>
-                        <SelectContent className="bg-background/95 backdrop-blur-md">
+                        <SelectContent>
                           {cropOptions.map((crop) => (
-                            <SelectItem key={crop.value} value={crop.value} className="py-3">
-                              <div className="flex items-center gap-3 py-1">
-                                <span className="text-xl">{crop.icon}</span>
-                                <span className="font-medium">{crop.value}</span>
-                                <Badge className={`ml-auto text-xs ${crop.color}`} variant="outline">
-                                  Premium
-                                </Badge>
+                            <SelectItem key={crop.value} value={crop.value}>
+                              <div className="flex items-center gap-2">
+                                <span>{crop.icon}</span>
+                                <span>{crop.value}</span>
                               </div>
                             </SelectItem>
                           ))}
@@ -445,358 +423,239 @@ const FarmerDashboard = () => {
                       </Select>
                     </div>
 
-                    <div className="space-y-3">
-                      <Label htmlFor="weight" className="text-base font-medium flex items-center gap-2">
-                        <Weight className="h-4 w-4 text-brand-orange" />
-                        {t('weight')} (kg) *
+                    <div className="space-y-2">
+                      <Label htmlFor="weight">
+                        Weight (kg) *
                       </Label>
                       <Input
                         id="weight"
                         type="number"
                         step="0.1"
+                        placeholder="Enter weight in kg"
                         value={harvestForm.weight}
                         onChange={(e) => setHarvestForm({ ...harvestForm, weight: e.target.value })}
-                        placeholder="25.5"
-                        className="h-12 bg-background/50 border-2 border-muted hover:border-brand-orange/50 focus:border-brand-orange transition-all text-lg"
+                        required
                       />
                     </div>
 
-                    <div className="space-y-3">
-                      <Label htmlFor="quantity" className="text-base font-medium flex items-center gap-2">
-                        <Package className="h-4 w-4 text-trust-quality" />
-                        {t('quantity')} (units) *
+                    <div className="space-y-2">
+                      <Label htmlFor="quantity">
+                        Quantity (units) *
                       </Label>
                       <Input
                         id="quantity"
                         type="number"
+                        placeholder="Enter quantity"
                         value={harvestForm.quantity}
                         onChange={(e) => setHarvestForm({ ...harvestForm, quantity: e.target.value })}
-                        placeholder="100"
-                        className="h-12 bg-background/50 border-2 border-muted hover:border-trust-quality/50 focus:border-trust-quality transition-all text-lg"
+                        required
                       />
                     </div>
 
-                    <div className="space-y-3">
-                      <Label htmlFor="location" className="text-base font-medium flex items-center gap-2">
-                        <MapPin className="h-4 w-4 text-brand-red" />
-                        {t('location')}
+                    <div className="space-y-2">
+                      <Label htmlFor="location" className="flex items-center gap-2">
+                        <MapPin className="h-4 w-4" />
+                        Location
                       </Label>
-                      <div className="flex gap-3">
+                      <div className="flex gap-2">
                         <Input
                           id="location"
+                          placeholder="Enter location or use GPS"
                           value={harvestForm.location}
                           onChange={(e) => setHarvestForm({ ...harvestForm, location: e.target.value })}
-                          placeholder="Will auto-fill with GPS"
-                          className="h-12 bg-background/50 border-2 border-muted hover:border-brand-red/50 focus:border-brand-red transition-all text-lg"
                         />
-                        <Button 
-                          type="button" 
-                          variant="outline" 
-                          size="icon" 
-                          onClick={getCurrentLocation} 
-                          className="shrink-0 h-12 w-12 border-2 border-brand-red/30 hover:border-brand-red hover:bg-brand-red/10"
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="icon"
+                          onClick={getCurrentLocation}
                         >
-                          <MapPin className="h-5 w-5 text-brand-red" />
+                          <MapPin className="h-4 w-4" />
                         </Button>
                       </div>
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="photo" className="flex items-center gap-2">
-                      <Camera className="h-4 w-4 text-muted-foreground" />
-                      {t('photoUpload')}
+                    <Label htmlFor="notes" className="flex items-center gap-2">
+                      <Mic className="h-4 w-4" />
+                      Notes
                     </Label>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <Input
-                        id="photo"
-                        type="file"
-                        accept="image/*"
-                        capture="environment"
-                        onChange={handlePhotoUpload}
-                        className="hidden"
+                    <div className="flex gap-2">
+                      <Textarea
+                        id="notes"
+                        placeholder="Add any additional notes about the harvest..."
+                        value={harvestForm.notes}
+                        onChange={(e) => setHarvestForm({ ...harvestForm, notes: e.target.value })}
+                        className="min-h-[100px]"
                       />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        onClick={startVoiceInput}
+                        disabled={isListening}
+                      >
+                        <Mic className={`h-4 w-4 ${isListening ? 'text-red-500' : ''}`} />
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Photo Documentation</Label>
+                    <div className="flex gap-2">
                       <Button
                         type="button"
                         variant="outline"
                         onClick={startCamera}
-                        className="flex items-center gap-2 h-10 sm:h-11"
+                        className="flex-1"
                       >
-                        <Camera className="h-4 w-4" />
-                        <span className="text-sm">📸 Take Photo</span>
+                        <Camera className="h-4 w-4 mr-2" />
+                        Take Photo
                       </Button>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => {
-                          const fileInput = document.createElement('input');
-                          fileInput.type = 'file';
-                          fileInput.accept = 'image/*';
-                          fileInput.onchange = (e) => {
-                            const file = (e.target as HTMLInputElement).files?.[0];
-                            if (file) handlePhotoUpload({ target: { files: [file] } } as any);
-                          };
-                          fileInput.click();
-                        }}
-                        className="flex items-center gap-2 h-10 sm:h-11"
-                      >
-                        <Upload className="h-4 w-4" />
-                        <span className="text-sm">📁 Upload Photo</span>
-                      </Button>
+                      <div className="flex-1">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handlePhotoUpload}
+                          className="hidden"
+                          id="photo-upload"
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => document.getElementById('photo-upload')?.click()}
+                          className="w-full"
+                        >
+                          <Upload className="h-4 w-4 mr-2" />
+                          Upload Photo
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                  
-                  {harvestForm.photo && (
-                    <div className="text-sm text-muted-foreground p-2 bg-muted rounded-md">
-                      ✅ {harvestForm.photo.name}
-                    </div>
-                  )}
-
-                  <div className="space-y-2">
-                    <Label htmlFor="notes" className="flex items-center gap-2">
-                      <Mic className="h-4 w-4 text-muted-foreground" />
-                      {t('notes')} (Optional)
-                    </Label>
-                    <div className="relative">
-                      <Textarea
-                        id="notes"
-                        value={harvestForm.notes}
-                        onChange={(e) => setHarvestForm({ ...harvestForm, notes: e.target.value })}
-                        placeholder="Add any additional notes about the harvest..."
-                        rows={3}
-                        className="resize-none"
-                      />
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        onClick={startVoiceInput}
-                        disabled={isListening}
-                        className="absolute bottom-2 right-2 h-8 w-8 p-0"
-                      >
-                        <Mic className={`h-4 w-4 ${isListening ? 'text-red-500 animate-pulse' : ''}`} />
-                      </Button>
-                    </div>
+                    {harvestForm.photo && (
+                      <div className="text-sm text-muted-foreground">
+                        Photo selected: {harvestForm.photo.name}
+                      </div>
+                    )}
                   </div>
 
-                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
-                    <Button type="submit" className="flex items-center gap-2 h-11">
-                      <Package className="h-4 w-4" />
-                      {t('recordHarvest')}
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => {
-                        setHarvestForm({
-                          cropSpecies: '',
-                          weight: '',
-                          quantity: '',
-                          location: '',
-                          notes: '',
-                          photo: null
-                        });
-                      }}
-                      className="h-11"
-                    >
-                      Clear Form
-                    </Button>
-                  </div>
+                  <Button type="submit" className="w-full">
+                    Record Harvest
+                  </Button>
                 </form>
               </CardContent>
             </Card>
           </TabsContent>
 
           <TabsContent value="past-harvests">
-            <div className="space-y-6">
-              <div className="flex items-center justify-between bg-gradient-to-r from-muted/50 to-accent/10 p-4 rounded-xl">
-                <div>
-                  <h2 className="text-2xl font-semibold bg-gradient-to-r from-brand-green to-trust-verified bg-clip-text text-transparent">
-                    {t('pastHarvests')}
-                  </h2>
-                  <p className="text-muted-foreground">Your harvest history and certifications</p>
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Eye className="h-5 w-5" />
+                  Past Harvests
+                </CardTitle>
+                <CardDescription>
+                  View and manage your previous harvest records
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {harvests.map((harvest) => (
+                    <div key={harvest.id} className="border rounded-lg p-4">
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <h3 className="font-semibold text-lg">{harvest.cropSpecies}</h3>
+                          <p className="text-sm text-muted-foreground">
+                            {new Date(harvest.timestamp).toLocaleDateString()}
+                          </p>
+                        </div>
+                        {getStatusBadge(harvest.status)}
+                      </div>
+                      
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
+                        <div>
+                          <p className="text-sm text-muted-foreground">Weight</p>
+                          <p className="font-medium">{harvest.weight} kg</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-muted-foreground">Quantity</p>
+                          <p className="font-medium">{harvest.quantity} units</p>
+                        </div>
+                        <div className="col-span-2">
+                          <p className="text-sm text-muted-foreground">Location</p>
+                          <p className="font-medium text-sm">{harvest.location}</p>
+                        </div>
+                      </div>
+                      
+                      {harvest.notes && (
+                        <div className="mb-3">
+                          <p className="text-sm text-muted-foreground">Notes</p>
+                          <p className="text-sm">{harvest.notes}</p>
+                        </div>
+                      )}
+                      
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => generateCertificate(harvest)}
+                      >
+                        <Download className="h-4 w-4 mr-2" />
+                        Download Certificate
+                      </Button>
+                    </div>
+                  ))}
                 </div>
-                <Badge variant="outline" className="bg-background/50 border-brand-green/30 text-brand-green">
-                  {harvests.length} records
-                </Badge>
-              </div>
-
-              <div className="grid gap-6">
-                {harvests.map((harvest) => {
-                  const cropOption = cropOptions.find(c => c.value === harvest.cropSpecies);
-                  return (
-                    <Card key={harvest.id} className="border-0 shadow-card bg-card/50 backdrop-blur-sm hover:shadow-trust transition-all duration-300 hover:scale-[1.02]">
-                      <CardContent className="p-6">
-                        <div className="flex items-start justify-between mb-6">
-                          <div className="flex items-center gap-4">
-                            <div className="p-3 bg-gradient-to-r from-brand-green/20 to-trust-organic/20 rounded-2xl border border-brand-green/30">
-                              <span className="text-2xl">{cropOption?.icon || '🌱'}</span>
-                            </div>
-                            <div>
-                              <h3 className="font-semibold text-xl text-foreground">{harvest.cropSpecies}</h3>
-                              <p className="text-sm text-muted-foreground flex items-center gap-2">
-                                <span className="inline-block w-2 h-2 bg-brand-green rounded-full"></span>
-                                ID: {harvest.id}
-                              </p>
-                            </div>
-                          </div>
-                          {getStatusBadge(harvest.status)}
-                        </div>
-
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
-                          <div className="flex items-center gap-3 p-3 bg-brand-orange/10 rounded-xl border border-brand-orange/20">
-                            <Weight className="h-5 w-5 text-brand-orange" />
-                            <div>
-                              <div className="font-semibold text-brand-orange">{harvest.weight} kg</div>
-                              <div className="text-xs text-muted-foreground">Weight</div>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-3 p-3 bg-trust-quality/10 rounded-xl border border-trust-quality/20">
-                            <Package className="h-5 w-5 text-trust-quality" />
-                            <div>
-                              <div className="font-semibold text-trust-quality">{harvest.quantity}</div>
-                              <div className="text-xs text-muted-foreground">Units</div>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-3 p-3 bg-brand-red/10 rounded-xl border border-brand-red/20">
-                            <MapPin className="h-5 w-5 text-brand-red" />
-                            <div>
-                              <div className="font-semibold text-brand-red text-sm truncate">{harvest.location}</div>
-                              <div className="text-xs text-muted-foreground">Location</div>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-3 p-3 bg-brand-blue/10 rounded-xl border border-brand-blue/20">
-                            <Clock className="h-5 w-5 text-brand-blue" />
-                            <div>
-                              <div className="font-semibold text-brand-blue text-sm">
-                                {new Date(harvest.timestamp).toLocaleDateString()}
-                              </div>
-                              <div className="text-xs text-muted-foreground">Date</div>
-                            </div>
-                          </div>
-                        </div>
-
-                        {harvest.notes && (
-                          <div className="bg-muted/30 rounded-lg p-4 border-l-4 border-brand-green">
-                            <p className="text-sm text-muted-foreground italic">
-                              "{harvest.notes}"
-                            </p>
-                          </div>
-                        )}
-
-                        <div className="flex flex-wrap gap-3 mt-6 pt-4 border-t border-muted">
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            onClick={() => {
-                              toast({ title: "Details", description: `Viewing details for harvest ${harvest.id}` });
-                            }}
-                            className="flex items-center gap-2 hover:bg-brand-green/10 hover:border-brand-green/50"
-                          >
-                            <Eye className="h-4 w-4" />
-                            View Details
-                          </Button>
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            onClick={() => generateCertificate(harvest)}
-                            className="flex items-center gap-2 hover:bg-trust-verified/10 hover:border-trust-verified/50"
-                          >
-                            <Package className="h-4 w-4" />
-                            Download Certificate
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  );
-                })}
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="analytics">
-            <div className="space-y-6">
-              <div className="bg-gradient-to-r from-muted/50 to-accent/10 p-4 rounded-xl">
-                <h2 className="text-2xl font-semibold bg-gradient-to-r from-brand-green to-trust-verified bg-clip-text text-transparent">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Calendar className="h-5 w-5" />
                   Analytics Dashboard
-                </h2>
-                <p className="text-muted-foreground">Track your farming performance and growth</p>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <Card className="bg-gradient-to-br from-trust-organic/20 to-brand-green/10 border-trust-organic/30 hover:shadow-trust transition-all">
-                  <CardHeader className="pb-3">
-                    <CardDescription className="text-trust-organic font-medium flex items-center gap-2">
-                      <Package className="h-4 w-4" />
-                      Total Harvests
-                    </CardDescription>
-                    <CardTitle className="text-3xl font-bold text-trust-organic">{harvests.length}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="pt-0">
-                    <p className="text-xs text-muted-foreground">+2 this month</p>
-                  </CardContent>
-                </Card>
-
-                <Card className="bg-gradient-to-br from-trust-verified/20 to-brand-green-light/10 border-trust-verified/30 hover:shadow-trust transition-all">
-                  <CardHeader className="pb-3">
-                    <CardDescription className="text-trust-verified font-medium flex items-center gap-2">
-                      <Calendar className="h-4 w-4" />
-                      Verified Records
-                    </CardDescription>
-                    <CardTitle className="text-3xl font-bold text-trust-verified">
-                      {harvests.filter(h => h.status === 'verified').length}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="pt-0">
-                    <p className="text-xs text-muted-foreground">100% verified rate</p>
-                  </CardContent>
-                </Card>
-
-                <Card className="bg-gradient-to-br from-brand-orange/20 to-brand-red/10 border-brand-orange/30 hover:shadow-trust transition-all">
-                  <CardHeader className="pb-3">
-                    <CardDescription className="text-brand-orange font-medium flex items-center gap-2">
-                      <Weight className="h-4 w-4" />
-                      Total Weight
-                    </CardDescription>
-                    <CardTitle className="text-3xl font-bold text-brand-orange">
+                </CardTitle>
+                <CardDescription>
+                  Track your farming progress and performance
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                  <div className="p-4 border rounded-lg text-center">
+                    <Package className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+                    <div className="text-2xl font-bold">{harvests.length}</div>
+                    <div className="text-sm text-muted-foreground">Total Harvests</div>
+                  </div>
+                  <div className="p-4 border rounded-lg text-center">
+                    <Weight className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+                    <div className="text-2xl font-bold">
                       {harvests.reduce((sum, h) => sum + h.weight, 0).toFixed(1)} kg
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="pt-0">
-                    <p className="text-xs text-muted-foreground">Across all crops</p>
-                  </CardContent>
-                </Card>
-
-                <Card className="bg-gradient-to-br from-trust-quality/20 to-brand-blue/10 border-trust-quality/30 hover:shadow-trust transition-all">
-                  <CardHeader className="pb-3">
-                    <CardDescription className="text-trust-quality font-medium flex items-center gap-2">
-                      <Eye className="h-4 w-4" />
-                      Quality Score
-                    </CardDescription>
-                    <CardTitle className="text-3xl font-bold text-trust-quality">95%</CardTitle>
-                  </CardHeader>
-                  <CardContent className="pt-0">
-                    <p className="text-xs text-muted-foreground">Excellent quality</p>
-                  </CardContent>
-                </Card>
-              </div>
-
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Card className="border-0 shadow-card bg-card/50 backdrop-blur-sm">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Package className="h-5 w-5 text-brand-green" />
-                      Recent Activity
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
+                    </div>
+                    <div className="text-sm text-muted-foreground">Total Weight</div>
+                  </div>
+                  <div className="p-4 border rounded-lg text-center">
+                    <Eye className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+                    <div className="text-2xl font-bold">
+                      {harvests.filter(h => h.status === 'verified').length}
+                    </div>
+                    <div className="text-sm text-muted-foreground">Verified Records</div>
+                  </div>
+                  <div className="p-4 border rounded-lg text-center">
+                    <Calendar className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+                    <div className="text-2xl font-bold">95%</div>
+                    <div className="text-sm text-muted-foreground">Quality Score</div>
+                  </div>
+                </div>
+                
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold">Recent Activity</h3>
+                  <div className="space-y-2">
                     {harvests.slice(0, 3).map((harvest) => (
-                      <div key={harvest.id} className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
-                        <div className="p-2 bg-brand-green/20 rounded-lg">
-                          <Package className="h-4 w-4 text-brand-green" />
-                        </div>
+                      <div key={harvest.id} className="flex items-center gap-3 p-3 border rounded-lg">
+                        <Package className="h-4 w-4 text-muted-foreground" />
                         <div className="flex-1">
-                          <p className="font-medium text-sm">{harvest.cropSpecies}</p>
+                          <p className="text-sm font-medium">{harvest.cropSpecies}</p>
                           <p className="text-xs text-muted-foreground">
                             {new Date(harvest.timestamp).toLocaleDateString()}
                           </p>
@@ -804,77 +663,24 @@ const FarmerDashboard = () => {
                         {getStatusBadge(harvest.status)}
                       </div>
                     ))}
-                  </CardContent>
-                </Card>
-
-                <Card className="border-0 shadow-card bg-card/50 backdrop-blur-sm">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Calendar className="h-5 w-5 text-trust-verified" />
-                      Crop Distribution
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      {Object.entries(
-                        harvests.reduce((acc, h) => {
-                          acc[h.cropSpecies] = (acc[h.cropSpecies] || 0) + 1;
-                          return acc;
-                        }, {} as Record<string, number>)
-                      ).map(([crop, count]) => {
-                        const cropOption = cropOptions.find(c => c.value === crop);
-                        const percentage = (count / harvests.length) * 100;
-                        return (
-                          <div key={crop} className="space-y-2">
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-2">
-                                <span className="text-lg">{cropOption?.icon || '🌱'}</span>
-                                <span className="font-medium text-sm">{crop}</span>
-                              </div>
-                              <span className="text-sm text-muted-foreground">{count} ({percentage.toFixed(0)}%)</span>
-                            </div>
-                            <div className="w-full bg-muted rounded-full h-2">
-                              <div 
-                                className="bg-gradient-to-r from-brand-green to-trust-verified h-2 rounded-full transition-all duration-500" 
-                                style={{ width: `${percentage}%` }}
-                              />
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
         </Tabs>
 
         {/* Camera Modal */}
         {showCamera && (
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-background border rounded-xl p-6 max-w-lg w-full shadow-glow">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-foreground">Take Photo</h3>
-                <Button variant="outline" size="sm" onClick={stopCamera}>
-                  Close
-                </Button>
-              </div>
-              
-              <div className="relative mb-4">
-                <video
-                  ref={videoRef}
-                  autoPlay
-                  playsInline
-                  className="w-full h-64 bg-muted rounded-lg object-cover"
-                />
-                <canvas ref={canvasRef} className="hidden" />
-              </div>
-              
+          <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center">
+            <div className="bg-card rounded-lg p-6 max-w-md w-full mx-4">
+              <h3 className="text-lg font-semibold mb-4">Take Photo</h3>
+              <video ref={videoRef} autoPlay className="w-full rounded-lg mb-4" />
+              <canvas ref={canvasRef} className="hidden" />
               <div className="flex gap-2">
-                <Button onClick={capturePhoto} className="flex-1 bg-gradient-to-r from-brand-green to-trust-verified">
+                <Button onClick={capturePhoto} className="flex-1">
                   <Camera className="h-4 w-4 mr-2" />
-                  Capture Photo
+                  Capture
                 </Button>
                 <Button variant="outline" onClick={stopCamera}>
                   Cancel
