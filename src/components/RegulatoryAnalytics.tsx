@@ -109,17 +109,17 @@ export const RegulatoryAnalytics: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header with Controls */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-bold flex items-center gap-2">
-            <BarChart3 className="h-6 w-6" />
+          <h2 className="text-xl sm:text-2xl font-bold flex items-center gap-2">
+            <BarChart3 className="h-5 w-5 sm:h-6 sm:w-6" />
             Regulatory Analytics
           </h2>
-          <p className="text-muted-foreground">Comprehensive compliance analytics and insights</p>
+          <p className="text-sm sm:text-base text-muted-foreground">Comprehensive compliance analytics and insights</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row gap-2 w-full lg:w-auto">
           <Select value={selectedTimeframe} onValueChange={handleTimeframeChange}>
-            <SelectTrigger className="w-32">
+            <SelectTrigger className="w-full sm:w-32">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -130,7 +130,7 @@ export const RegulatoryAnalytics: React.FC = () => {
             </SelectContent>
           </Select>
           <Select value={selectedRegion} onValueChange={handleRegionChange}>
-            <SelectTrigger className="w-32">
+            <SelectTrigger className="w-full sm:w-32">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -142,19 +142,23 @@ export const RegulatoryAnalytics: React.FC = () => {
               <SelectItem value="central">Central India</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline" size="sm" onClick={handleRefresh}>
-            <RefreshCw className="h-4 w-4 mr-1" />
-            Refresh
-          </Button>
-          <Button size="sm" onClick={handleExport}>
-            <Download className="h-4 w-4 mr-1" />
-            Export
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={handleRefresh} className="flex-1 sm:flex-none">
+              <RefreshCw className="h-4 w-4 mr-1" />
+              <span className="hidden sm:inline">Refresh</span>
+              <span className="sm:hidden">Refresh</span>
+            </Button>
+            <Button size="sm" onClick={handleExport} className="flex-1 sm:flex-none">
+              <Download className="h-4 w-4 mr-1" />
+              <span className="hidden sm:inline">Export</span>
+              <span className="sm:hidden">Export</span>
+            </Button>
+          </div>
         </div>
       </div>
 
       {/* Key Performance Indicators */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <Card className="col-span-1">
           <CardHeader className="pb-2">
             <CardDescription className="flex items-center gap-2">
@@ -241,12 +245,26 @@ export const RegulatoryAnalytics: React.FC = () => {
       </div>
 
       <Tabs defaultValue="compliance" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="compliance">Compliance by Category</TabsTrigger>
-          <TabsTrigger value="regional">Regional Analysis</TabsTrigger>
-          <TabsTrigger value="trends">Trends & Patterns</TabsTrigger>
-          <TabsTrigger value="violations">Violation Types</TabsTrigger>
-        </TabsList>
+        <div className="overflow-x-auto scrollbar-hide">
+          <TabsList className="grid w-full grid-cols-4 min-w-[320px]">
+            <TabsTrigger value="compliance" className="text-xs sm:text-sm px-2 sm:px-3">
+              <span className="hidden sm:inline">Compliance by Category</span>
+              <span className="sm:hidden">Compliance</span>
+            </TabsTrigger>
+            <TabsTrigger value="regional" className="text-xs sm:text-sm px-2 sm:px-3">
+              <span className="hidden sm:inline">Regional Analysis</span>
+              <span className="sm:hidden">Regional</span>
+            </TabsTrigger>
+            <TabsTrigger value="trends" className="text-xs sm:text-sm px-2 sm:px-3">
+              <span className="hidden sm:inline">Trends & Patterns</span>
+              <span className="sm:hidden">Trends</span>
+            </TabsTrigger>
+            <TabsTrigger value="violations" className="text-xs sm:text-sm px-2 sm:px-3">
+              <span className="hidden sm:inline">Violation Types</span>
+              <span className="sm:hidden">Violations</span>
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
         <TabsContent value="compliance">
           <Card>
@@ -258,9 +276,9 @@ export const RegulatoryAnalytics: React.FC = () => {
               <div className="space-y-4">
                 {analyticsData.complianceByCategory.map((category, index) => (
                   <div key={category.category} className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <h4 className="font-medium">{category.category}</h4>
-                      <div className="flex items-center gap-4 text-sm">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+                      <h4 className="font-medium text-sm sm:text-base">{category.category}</h4>
+                      <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm">
                         <span className="text-muted-foreground">{category.total} entities</span>
                         <span className="text-red-600">{category.violations} violations</span>
                         <Badge variant={category.compliance >= 90 ? 'secondary' : category.compliance >= 80 ? 'default' : 'destructive'}>
@@ -290,15 +308,15 @@ export const RegulatoryAnalytics: React.FC = () => {
             <CardContent>
               <div className="grid gap-4">
                 {analyticsData.regionalData.map((region) => (
-                  <div key={region.region} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex items-center gap-4">
-                      <MapPin className="h-5 w-5 text-muted-foreground" />
+                  <div key={region.region} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 sm:p-4 border rounded-lg gap-3 sm:gap-4">
+                    <div className="flex items-center gap-3 sm:gap-4">
+                      <MapPin className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
                       <div>
-                        <h4 className="font-semibold">{region.region}</h4>
-                        <p className="text-sm text-muted-foreground">{region.entities} registered entities</p>
+                        <h4 className="font-semibold text-sm sm:text-base">{region.region}</h4>
+                        <p className="text-xs sm:text-sm text-muted-foreground">{region.entities} registered entities</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-6 text-sm">
+                    <div className="flex items-center justify-between sm:gap-6 text-xs sm:text-sm">
                       <div className="text-center">
                         <p className="font-medium text-green-600">{region.compliance}%</p>
                         <p className="text-xs text-muted-foreground">Compliance</p>
@@ -328,28 +346,30 @@ export const RegulatoryAnalytics: React.FC = () => {
             <CardContent>
               <div className="space-y-6">
                 {/* Chart visualization */}
-                <div className="grid grid-cols-6 gap-4 p-4 border rounded-lg">
-                  {analyticsData.trendsData.monthly.map((month, index) => (
-                    <div key={month.month} className="text-center">
-                      <div className="relative mb-4">
-                        <div className="h-32 flex items-end justify-center">
-                          <div 
-                            className="w-8 bg-green-500 rounded-t" 
-                            style={{ height: `${(month.compliance / 100) * 128}px` }}
-                          ></div>
+                <div className="overflow-x-auto scrollbar-hide">
+                  <div className="grid grid-cols-6 gap-2 sm:gap-4 p-3 sm:p-4 border rounded-lg min-w-[400px]">
+                    {analyticsData.trendsData.monthly.map((month, index) => (
+                      <div key={month.month} className="text-center">
+                        <div className="relative mb-3 sm:mb-4">
+                          <div className="h-20 sm:h-32 flex items-end justify-center">
+                            <div 
+                              className="w-6 sm:w-8 bg-green-500 rounded-t" 
+                              style={{ height: `${(month.compliance / 100) * (window.innerWidth < 640 ? 80 : 128)}px` }}
+                            ></div>
+                          </div>
+                          <div className="absolute bottom-0 right-0 h-12 sm:h-20 flex items-end">
+                            <div 
+                              className="w-3 sm:w-4 bg-red-500 rounded-t" 
+                              style={{ height: `${(month.violations / 50) * (window.innerWidth < 640 ? 48 : 80)}px` }}
+                            ></div>
+                          </div>
                         </div>
-                        <div className="absolute bottom-0 right-0 h-20 flex items-end">
-                          <div 
-                            className="w-4 bg-red-500 rounded-t" 
-                            style={{ height: `${(month.violations / 50) * 80}px` }}
-                          ></div>
-                        </div>
+                        <p className="text-xs font-medium">{month.month}</p>
+                        <p className="text-xs text-green-600">{month.compliance}%</p>
+                        <p className="text-xs text-red-600">{month.violations}V</p>
                       </div>
-                      <p className="text-xs font-medium">{month.month}</p>
-                      <p className="text-xs text-green-600">{month.compliance}%</p>
-                      <p className="text-xs text-red-600">{month.violations}V</p>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
                 
                 {/* Legend */}
@@ -365,7 +385,7 @@ export const RegulatoryAnalytics: React.FC = () => {
                 </div>
 
                 {/* Key Insights */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
                   <Card>
                     <CardHeader className="pb-2">
                       <CardTitle className="text-lg flex items-center gap-2">
@@ -411,25 +431,25 @@ export const RegulatoryAnalytics: React.FC = () => {
             <CardContent>
               <div className="space-y-4">
                 {analyticsData.violationTypes.map((violation, index) => (
-                  <div key={violation.type} className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors">
-                    <div className="flex items-center gap-4">
+                  <div key={violation.type} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 sm:p-4 border rounded-lg hover:bg-accent/50 transition-colors gap-3 sm:gap-4">
+                    <div className="flex items-center gap-3 sm:gap-4 flex-1">
                       <div className="text-center">
-                        <p className="text-2xl font-bold">{index + 1}</p>
+                        <p className="text-xl sm:text-2xl font-bold">{index + 1}</p>
                       </div>
-                      <div>
-                        <h4 className="font-semibold">{violation.type}</h4>
-                        <div className="flex items-center gap-2 mt-1">
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-sm sm:text-base break-words">{violation.type}</h4>
+                        <div className="flex flex-wrap items-center gap-2 mt-1">
                           <Badge variant={violation.severity === 'Critical' ? 'destructive' : violation.severity === 'High' ? 'default' : 'secondary'}>
                             {violation.severity}
                           </Badge>
-                          <span className={`text-sm font-medium ${violation.trend.startsWith('+') ? 'text-red-600' : 'text-green-600'}`}>
+                          <span className={`text-xs sm:text-sm font-medium ${violation.trend.startsWith('+') ? 'text-red-600' : 'text-green-600'}`}>
                             {violation.trend} vs last period
                           </span>
                         </div>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className="text-2xl font-bold">{violation.count}</p>
+                    <div className="text-left sm:text-right">
+                      <p className="text-xl sm:text-2xl font-bold">{violation.count}</p>
                       <p className="text-xs text-muted-foreground">total cases</p>
                     </div>
                   </div>

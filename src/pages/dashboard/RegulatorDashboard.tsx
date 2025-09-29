@@ -302,7 +302,7 @@ Contact: regulatory@foodsafety.gov | Emergency: 1-800-FDA-1088
           <TabsContent value="compliance">
             <div className="grid gap-6">
               {/* Key Metrics Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <Card className="border-l-4 border-l-red-500">
                   <CardHeader className="pb-2">
                     <CardDescription className="flex items-center gap-2">
@@ -357,9 +357,9 @@ Contact: regulatory@foodsafety.gov | Emergency: 1-800-FDA-1088
                 <CardContent>
                   <div className="space-y-4">
                     {violations.map((violation) => (
-                      <div key={violation.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3">
+                      <div key={violation.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 sm:p-4 border rounded-lg hover:bg-accent/50 transition-colors gap-3 sm:gap-4">
+                        <div className="flex-1 space-y-2 sm:space-y-3">
+                          <div className="flex flex-wrap items-center gap-2">
                             <Badge variant="outline" className="font-mono text-xs">{violation.id}</Badge>
                             <Badge variant={violation.severity === 'Critical' ? 'destructive' : violation.severity === 'High' ? 'default' : 'secondary'}>
                               {violation.severity}
@@ -368,11 +368,12 @@ Contact: regulatory@foodsafety.gov | Emergency: 1-800-FDA-1088
                               {violation.status}
                             </Badge>
                           </div>
-                          <h4 className="font-semibold mt-2">{violation.entity}</h4>
-                          <p className="text-sm text-muted-foreground">{violation.type} • {violation.date}</p>
+                          <h4 className="font-semibold text-sm sm:text-base break-words">{violation.entity}</h4>
+                          <p className="text-xs sm:text-sm text-muted-foreground">{violation.type} • {violation.date}</p>
                         </div>
-                        <Button variant="outline" size="sm" onClick={() => handleViewViolationDetails(violation.id)}>
-                          View Details
+                        <Button variant="outline" size="sm" onClick={() => handleViewViolationDetails(violation.id)} className="w-full sm:w-auto">
+                          <span className="hidden sm:inline">View Details</span>
+                          <span className="sm:hidden">Details</span>
                         </Button>
                       </div>
                     ))}
@@ -381,7 +382,7 @@ Contact: regulatory@foodsafety.gov | Emergency: 1-800-FDA-1088
               </Card>
 
               {/* Quick Actions */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <Dialog>
                   <DialogTrigger asChild>
                     <Card className="cursor-pointer hover:shadow-lg transition-shadow">
