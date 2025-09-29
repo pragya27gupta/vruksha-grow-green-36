@@ -300,30 +300,35 @@ const ProcessorDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background p-4 md:p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-primary mb-2">{t('processorPortal')}</h1>
-          <p className="text-muted-foreground">
+    <div className="min-h-screen bg-background p-3 sm:p-4 md:p-6">
+      <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-primary mb-2 leading-tight">{t('processorPortal')}</h1>
+          <p className="text-sm sm:text-base text-muted-foreground">
             Process batches, record environmental conditions, and maintain quality standards
           </p>
         </div>
 
-        <Tabs defaultValue="batches" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="batches" className="flex items-center gap-2">
-              <Eye className="h-4 w-4" />
-              {t('batchesAwaiting')}
-            </TabsTrigger>
-            <TabsTrigger value="add-process" className="flex items-center gap-2">
-              <Plus className="h-4 w-4" />
-              {t('addProcessingStep')}
-            </TabsTrigger>
-            <TabsTrigger value="analytics" className="flex items-center gap-2">
-              <Factory className="h-4 w-4" />
-              Analytics
-            </TabsTrigger>
-          </TabsList>
+        <Tabs defaultValue="batches" className="space-y-4 sm:space-y-6">
+          <div className="overflow-x-auto scrollbar-hide">
+            <TabsList className="grid w-full grid-cols-3 min-w-[320px]">
+              <TabsTrigger value="batches" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
+                <Eye className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden xs:inline">{t('batchesAwaiting')}</span>
+                <span className="xs:hidden">Batches</span>
+              </TabsTrigger>
+              <TabsTrigger value="add-process" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
+                <Plus className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden xs:inline">{t('addProcessingStep')}</span>
+                <span className="xs:hidden">Process</span>
+              </TabsTrigger>
+              <TabsTrigger value="analytics" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
+                <Factory className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden xs:inline">Analytics</span>
+                <span className="xs:hidden">Data</span>
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="batches">
             <div className="space-y-4">

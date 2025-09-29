@@ -55,37 +55,37 @@ const Contact = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <PageLayout>
-        <div className="max-w-6xl mx-auto space-y-12">
+      <PageLayout className="space-y-8 sm:space-y-12">
+        <div className="max-w-6xl mx-auto space-y-8 sm:space-y-12">
           {/* Hero Section */}
-          <div className="text-center space-y-6">
-            <h1 className="text-4xl md:text-6xl font-bold text-foreground">
+          <div className="text-center space-y-4 sm:space-y-6">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
               {t('contactTitle')}
             </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed px-4">
               {t('contactDescription')}
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12">
+          <div className="grid lg:grid-cols-2 gap-8 sm:gap-12">
             {/* Contact Information */}
-            <div className="space-y-8">
+            <div className="space-y-6 sm:space-y-8">
               <div>
-                <h2 className="text-3xl font-bold text-foreground mb-6">{t('getInTouch')}</h2>
-                <p className="text-muted-foreground mb-8">
+                <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-4 sm:mb-6">{t('getInTouch')}</h2>
+                <p className="text-muted-foreground mb-6 sm:mb-8">
                   {t('getInTouchDesc')}
                 </p>
               </div>
 
-              <div className="grid sm:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 {contactInfo.map((info, index) => (
                   <Card key={index} className="hover:shadow-lg transition-shadow">
-                    <CardContent className="p-6">
-                      <div className="flex items-start space-x-4">
+                    <CardContent className="p-4 sm:p-6">
+                      <div className="flex items-start space-x-3 sm:space-x-4">
                         <div className="flex-shrink-0">{info.icon}</div>
-                        <div className="space-y-1">
-                          <h3 className="font-semibold text-foreground">{info.title}</h3>
-                          <p className="text-sm font-medium text-accent">{info.content}</p>
+                        <div className="space-y-1 min-w-0">
+                          <h3 className="font-semibold text-foreground text-sm sm:text-base">{info.title}</h3>
+                          <p className="text-sm font-medium text-accent break-words">{info.content}</p>
                           <p className="text-xs text-muted-foreground">{info.description}</p>
                         </div>
                       </div>
@@ -98,20 +98,21 @@ const Contact = () => {
             {/* Contact Form */}
             <Card className="shadow-lg">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-2xl">
-                  <MessageSquare className="w-6 h-6 text-accent" />
+                <CardTitle className="flex items-center gap-2 text-xl sm:text-2xl">
+                  <MessageSquare className="w-5 h-5 sm:w-6 sm:h-6 text-accent" />
                   {t('sendMessage')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid sm:grid-cols-2 gap-4">
+                <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="firstName">{t('firstName')}</Label>
                       <Input 
                         id="firstName" 
                         placeholder={t('firstNamePlaceholder')}
                         required 
+                        className="h-10 sm:h-11"
                       />
                     </div>
                     <div className="space-y-2">
@@ -120,6 +121,7 @@ const Contact = () => {
                         id="lastName" 
                         placeholder={t('lastNamePlaceholder')}
                         required 
+                        className="h-10 sm:h-11"
                       />
                     </div>
                   </div>
@@ -131,6 +133,7 @@ const Contact = () => {
                       type="email" 
                       placeholder={t('emailPlaceholder')}
                       required 
+                      className="h-10 sm:h-11"
                     />
                   </div>
                   
@@ -140,6 +143,7 @@ const Contact = () => {
                       id="subject" 
                       placeholder={t('subjectPlaceholder')}
                       required 
+                      className="h-10 sm:h-11"
                     />
                   </div>
                   
@@ -148,12 +152,13 @@ const Contact = () => {
                     <Textarea 
                       id="message" 
                       placeholder={t('messagePlaceholder')}
-                      rows={5}
+                      rows={4}
                       required 
+                      className="resize-none"
                     />
                   </div>
                   
-                  <Button type="submit" className="w-full">
+                  <Button type="submit" className="w-full h-11 sm:h-12">
                     <Send className="w-4 h-4 mr-2" />
                     {t('sendMessage')}
                   </Button>

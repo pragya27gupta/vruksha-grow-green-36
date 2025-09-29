@@ -258,12 +258,12 @@ Contact: regulatory@foodsafety.gov | Emergency: 1-800-FDA-1088
   };
 
   return (
-    <div className="min-h-screen bg-background p-4 md:p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
-        <div className="mb-8 flex justify-between items-center">
+    <div className="min-h-screen bg-background p-3 sm:p-4 md:p-6">
+      <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
+        <div className="mb-6 sm:mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
           <div>
-            <h1 className="text-3xl font-bold text-primary mb-2">{t('regulatorPortal')}</h1>
-            <p className="text-muted-foreground">
+            <h1 className="text-2xl sm:text-3xl font-bold text-primary mb-2 leading-tight">{t('regulatorPortal')}</h1>
+            <p className="text-sm sm:text-base text-muted-foreground">
               Monitor compliance, review violations, and ensure regulatory standards
             </p>
           </div>
@@ -271,28 +271,33 @@ Contact: regulatory@foodsafety.gov | Emergency: 1-800-FDA-1088
             variant="outline" 
             onClick={handleRefreshData}
             disabled={isRefreshing}
-            className="gap-2"
+            className="gap-2 w-full sm:w-auto"
           >
             <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
             {isRefreshing ? 'Refreshing...' : 'Refresh Data'}
           </Button>
         </div>
 
-        <Tabs defaultValue="compliance" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="compliance" className="flex items-center gap-2">
-              <Shield className="h-4 w-4" />
-              {t('complianceDashboard')}
-            </TabsTrigger>
-            <TabsTrigger value="reports" className="flex items-center gap-2">
-              <Download className="h-4 w-4" />
-              {t('complianceReports')}
-            </TabsTrigger>
-            <TabsTrigger value="analytics" className="flex items-center gap-2">
-              <BarChart3 className="h-4 w-4" />
-              Analytics
-            </TabsTrigger>
-          </TabsList>
+        <Tabs defaultValue="compliance" className="space-y-4 sm:space-y-6">
+          <div className="overflow-x-auto scrollbar-hide">
+            <TabsList className="grid w-full grid-cols-3 min-w-[320px]">
+              <TabsTrigger value="compliance" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
+                <Shield className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden xs:inline">{t('complianceDashboard')}</span>
+                <span className="xs:hidden">Compliance</span>
+              </TabsTrigger>
+              <TabsTrigger value="reports" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
+                <Download className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden xs:inline">{t('complianceReports')}</span>
+                <span className="xs:hidden">Reports</span>
+              </TabsTrigger>
+              <TabsTrigger value="analytics" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
+                <BarChart3 className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden xs:inline">Analytics</span>
+                <span className="xs:hidden">Data</span>
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="compliance">
             <div className="grid gap-6">

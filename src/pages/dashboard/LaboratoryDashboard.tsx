@@ -223,30 +223,35 @@ const LaboratoryDashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background p-4 md:p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-primary mb-2">{t('laboratoryPortal')}</h1>
-          <p className="text-muted-foreground">
+    <div className="min-h-screen bg-background p-3 sm:p-4 md:p-6">
+      <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-primary mb-2 leading-tight">{t('laboratoryPortal')}</h1>
+          <p className="text-sm sm:text-base text-muted-foreground">
             Conduct quality tests, validate standards, and issue certificates
           </p>
         </div>
 
-        <Tabs defaultValue="samples" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="samples" className="flex items-center gap-2">
-              <TestTube className="h-4 w-4" />
-              {t('pendingSamples')}
-            </TabsTrigger>
-            <TabsTrigger value="upload-test" className="flex items-center gap-2">
-              <Upload className="h-4 w-4" />
-              {t('qualityTest')}
-            </TabsTrigger>
-            <TabsTrigger value="analytics" className="flex items-center gap-2">
-              <FlaskConical className="h-4 w-4" />
-              Analytics
-            </TabsTrigger>
-          </TabsList>
+        <Tabs defaultValue="samples" className="space-y-4 sm:space-y-6">
+          <div className="overflow-x-auto scrollbar-hide">
+            <TabsList className="grid w-full grid-cols-3 min-w-[320px]">
+              <TabsTrigger value="samples" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
+                <TestTube className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden xs:inline">{t('pendingSamples')}</span>
+                <span className="xs:hidden">Samples</span>
+              </TabsTrigger>
+              <TabsTrigger value="upload-test" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
+                <Upload className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden xs:inline">{t('qualityTest')}</span>
+                <span className="xs:hidden">Test</span>
+              </TabsTrigger>
+              <TabsTrigger value="analytics" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
+                <FlaskConical className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden xs:inline">Analytics</span>
+                <span className="xs:hidden">Data</span>
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="samples">
             <div className="space-y-4">

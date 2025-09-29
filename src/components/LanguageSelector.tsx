@@ -30,15 +30,15 @@ const LanguageSelector = () => {
 
   return (
     <Select onValueChange={handleLanguageChange} defaultValue={i18n.language}>
-      <SelectTrigger className="w-auto gap-2 border-0 bg-transparent">
-        <Globe className="h-4 w-4" />
+      <SelectTrigger className="w-auto gap-1 sm:gap-2 border-0 bg-transparent px-1 sm:px-2 h-8 sm:h-9">
+        <Globe className="h-3 w-3 sm:h-4 sm:w-4" />
         <SelectValue placeholder={currentLanguage.nativeName} />
       </SelectTrigger>
       <SelectContent>
         {languages.map((language) => (
           <SelectItem key={language.code} value={language.code}>
             <span className="flex items-center gap-2">
-              {language.nativeName} ({language.name})
+              {language.nativeName}
             </span>
           </SelectItem>
         ))}
