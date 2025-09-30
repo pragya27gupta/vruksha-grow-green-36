@@ -179,9 +179,8 @@ const Signup = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="emailOrPhone" className="flex items-center gap-2">
-                Email / Phone Number
-                <span className="text-xs text-muted-foreground">(either one)</span>
+              <Label htmlFor="emailOrPhone">
+                Email or Phone Number
               </Label>
               <Input
                 id="emailOrPhone"
@@ -199,7 +198,7 @@ const Signup = () => {
                 className="placeholder:text-muted-foreground/60"
               />
               <p className="text-xs text-muted-foreground">
-                Enter either your email address or 10-digit phone number
+                Enter your email address or 10-digit phone number
               </p>
             </div>
 
