@@ -18,7 +18,7 @@ const Signup = () => {
   const { signup } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
-    email: '',
+    emailOrPhone: '', // Changed from email to emailOrPhone
     password: '',
     confirmPassword: '',
     role: '' as UserRole | ''
@@ -37,10 +37,23 @@ const Signup = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.name || !formData.email || !formData.password || !formData.role) {
+    if (!formData.name || !formData.emailOrPhone || !formData.password || !formData.role) {
       toast({
         title: "Error",
         description: "Please fill in all fields",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Validate email or phone
+    const isEmail = formData.emailOrPhone.includes('@');
+    const isPhone = /^\d{10}$/.test(formData.emailOrPhone);
+    
+    if (!isEmail && !isPhone) {
+      toast({
+        title: "Error",
+        description: "Please enter a valid email address or 10-digit phone number",
         variant: "destructive"
       });
       return;
@@ -66,7 +79,11 @@ const Signup = () => {
 
     setIsLoading(true);
     try {
-      const success = await signup(formData.email, formData.password, formData.role, formData.name);
+      // Determine email and phone values
+      const email = isEmail ? formData.emailOrPhone : `${formData.emailOrPhone}@phone.demo`;
+      const phone = isPhone ? formData.emailOrPhone : undefined;
+      
+      const success = await signup(email, formData.password, formData.role, formData.name, phone);
       if (success) {
         toast({
           title: "Success",
@@ -162,14 +179,28 @@ const Signup = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email">{t('email')}</Label>
+              <Label htmlFor="emailOrPhone" className="flex items-center gap-2">
+                Email / Phone Number
+                <span className="text-xs text-muted-foreground">(either one)</span>
+              </Label>
               <Input
-                id="email"
-                type="email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                placeholder="your.email@example.com"
+                id="emailOrPhone"
+                type="text"
+                value={formData.emailOrPhone}
+                onChange={(e) => {
+                  let value = e.target.value;
+                  // If it looks like a phone number (only digits), limit to 10 digits
+                  if (/^\d+$/.test(value)) {
+                    value = value.slice(0, 10);
+                  }
+                  setFormData({ ...formData, emailOrPhone: value });
+                }}
+                placeholder="your.email@example.com / 9876543210"
+                className="placeholder:text-muted-foreground/60"
               />
+              <p className="text-xs text-muted-foreground">
+                Enter either your email address or 10-digit phone number
+              </p>
             </div>
 
             <div className="space-y-2">
