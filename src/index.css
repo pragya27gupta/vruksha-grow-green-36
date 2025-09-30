@@ -48,6 +48,22 @@ All colors MUST be HSL.
     --brand-black: 0 0% 9%;
     --brand-white: 0 0% 98%;
     
+    /* Farmer Portal Earth Tones */
+    --farmer-forest: 120 42% 20%;
+    --farmer-sage: 95 23% 50%;
+    --farmer-soil: 25 60% 30%;
+    --farmer-earth: 35 25% 60%;
+    --farmer-cream: 45 40% 92%;
+    --farmer-wheat: 45 30% 85%;
+    
+    /* Farmer UI Colors */
+    --farmer-primary: var(--farmer-forest);
+    --farmer-secondary: var(--farmer-sage);
+    --farmer-accent: var(--farmer-soil);
+    --farmer-success: 142 76% 36%;
+    --farmer-warning: 45 95% 60%;
+    --farmer-info: 210 70% 35%;
+    
     /* Trust & Certification Colors */
     --trust-verified: 142 76% 36%;
     --trust-organic: 89 75% 45%;

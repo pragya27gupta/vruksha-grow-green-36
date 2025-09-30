@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { Progress } from '@/components/ui/progress';
 import { 
   Camera, 
   MapPin, 
@@ -22,7 +23,14 @@ import {
   Calendar,
   Weight,
   Package,
-  Download
+  Download,
+  ChevronRight,
+  CheckCircle,
+  ArrowLeft,
+  Leaf,
+  Sprout,
+  TreePine,
+  HelpCircle
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
@@ -40,6 +48,7 @@ interface HarvestRecord {
 
 const FarmerDashboard = () => {
   const { t } = useTranslation();
+  const [currentStep, setCurrentStep] = useState(1);
   const [harvestForm, setHarvestForm] = useState({
     cropSpecies: '',
     weight: '',
@@ -54,6 +63,8 @@ const FarmerDashboard = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
+
+  const totalSteps = 5;
 
   const [harvests, setHarvests] = useState<HarvestRecord[]>([
     {
@@ -101,7 +112,7 @@ const FarmerDashboard = () => {
     
     if (!harvestForm.cropSpecies || !harvestForm.weight || !harvestForm.quantity) {
       toast({
-        title: "Error",
+        title: "🚫 Missing Information",
         description: "Please fill in all required fields",
         variant: "destructive"
       });
@@ -128,10 +139,11 @@ const FarmerDashboard = () => {
       notes: '',
       photo: null
     });
+    setCurrentStep(1);
 
     toast({
-      title: "Success",
-      description: "Harvest record created successfully!"
+      title: "🎉 Success!",
+      description: "Harvest record created successfully! Great work!"
     });
   };
 
@@ -322,284 +334,447 @@ const FarmerDashboard = () => {
   };
 
   const getStatusBadge = (status: string) => {
-    const variants = {
-      recorded: 'secondary',
-      verified: 'default',
-      processed: 'outline'
+    const statusConfig = {
+      recorded: { variant: 'secondary' as const, color: 'bg-orange-100 text-orange-800 border-orange-200', icon: Clock },
+      verified: { variant: 'default' as const, color: 'bg-green-100 text-green-800 border-green-200', icon: CheckCircle },
+      processed: { variant: 'outline' as const, color: 'bg-blue-100 text-blue-800 border-blue-200', icon: Package }
     };
+    const config = statusConfig[status as keyof typeof statusConfig];
+    const Icon = config.icon;
+    
     return (
-      <Badge variant={variants[status as keyof typeof variants] as "default" | "secondary" | "destructive" | "outline"}>
+      <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium ${config.color}`}>
+        <Icon className="h-4 w-4" />
         {status.charAt(0).toUpperCase() + status.slice(1)}
-      </Badge>
+      </div>
     );
   };
 
+  const nextStep = () => {
+    if (currentStep < totalSteps) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const prevStep = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+  const renderStepContent = () => {
+    switch (currentStep) {
+      case 1:
+        return (
+          <div className="space-y-6">
+            <div className="text-center space-y-2">
+              <Sprout className="h-16 w-16 mx-auto text-green-600" />
+              <h2 className="text-2xl font-bold">Choose Your Crop</h2>
+              <p className="text-muted-foreground">Select the crop you're harvesting today</p>
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {cropOptions.map((crop) => (
+                <button
+                  key={crop.value}
+                  type="button"
+                  onClick={() => {
+                    setHarvestForm({ ...harvestForm, cropSpecies: crop.value });
+                    nextStep();
+                  }}
+                  className={`p-6 rounded-xl border-2 transition-all ${
+                    harvestForm.cropSpecies === crop.value
+                      ? 'border-green-500 bg-green-50 shadow-lg'
+                      : 'border-gray-200 hover:border-green-300 hover:shadow-md'
+                  }`}
+                >
+                  <div className="text-3xl mb-2">{crop.icon}</div>
+                  <div className="font-medium text-sm text-center">{crop.value}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+        );
+
+      case 2:
+        return (
+          <div className="space-y-8">
+            <div className="text-center space-y-2">
+              <Weight className="h-16 w-16 mx-auto text-green-600" />
+              <h2 className="text-2xl font-bold">Measurements</h2>
+              <p className="text-muted-foreground">How much did you harvest?</p>
+            </div>
+            
+            <div className="space-y-6">
+              <div className="space-y-3">
+                <Label className="text-lg font-medium">Weight (kg) *</Label>
+                <Input
+                  type="number"
+                  step="0.1"
+                  placeholder="0.0"
+                  value={harvestForm.weight}
+                  onChange={(e) => setHarvestForm({ ...harvestForm, weight: e.target.value })}
+                  className="h-16 text-2xl text-center"
+                />
+              </div>
+              
+              <div className="space-y-3">
+                <Label className="text-lg font-medium">Quantity (units) *</Label>
+                <Input
+                  type="number"
+                  placeholder="0"
+                  value={harvestForm.quantity}
+                  onChange={(e) => setHarvestForm({ ...harvestForm, quantity: e.target.value })}
+                  className="h-16 text-2xl text-center"
+                />
+              </div>
+            </div>
+          </div>
+        );
+
+      case 3:
+        return (
+          <div className="space-y-8">
+            <div className="text-center space-y-2">
+              <MapPin className="h-16 w-16 mx-auto text-green-600" />
+              <h2 className="text-2xl font-bold">Location</h2>
+              <p className="text-muted-foreground">Where did you harvest this crop?</p>
+            </div>
+            
+            <div className="space-y-6">
+              <Button
+                type="button"
+                variant="outline"
+                size="lg"
+                onClick={getCurrentLocation}
+                className="w-full h-16 text-lg border-2 border-green-200 hover:border-green-400"
+              >
+                <MapPin className="h-6 w-6 mr-3" />
+                Use GPS Location
+              </Button>
+              
+              <div className="text-center text-muted-foreground">or</div>
+              
+              <div className="space-y-3">
+                <Label className="text-lg font-medium">Enter location manually</Label>
+                <Input
+                  placeholder="Field name, village, etc."
+                  value={harvestForm.location}
+                  onChange={(e) => setHarvestForm({ ...harvestForm, location: e.target.value })}
+                  className="h-14 text-lg"
+                />
+              </div>
+            </div>
+          </div>
+        );
+
+      case 4:
+        return (
+          <div className="space-y-8">
+            <div className="text-center space-y-2">
+              <Camera className="h-16 w-16 mx-auto text-green-600" />
+              <h2 className="text-2xl font-bold">Documentation</h2>
+              <p className="text-muted-foreground">Add photos and notes</p>
+            </div>
+            
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="lg"
+                  onClick={startCamera}
+                  className="h-24 border-2 border-green-200 hover:border-green-400 flex-col"
+                >
+                  <Camera className="h-8 w-8 mb-2" />
+                  Take Photo
+                </Button>
+                
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="lg"
+                  onClick={() => document.getElementById('photo-upload')?.click()}
+                  className="h-24 border-2 border-green-200 hover:border-green-400 flex-col"
+                >
+                  <Upload className="h-8 w-8 mb-2" />
+                  Upload Photo
+                </Button>
+              </div>
+              
+              {harvestForm.photo && (
+                <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="h-5 w-5 text-green-600" />
+                    <span className="text-green-800">Photo ready: {harvestForm.photo.name}</span>
+                  </div>
+                </div>
+              )}
+              
+              <div className="space-y-3">
+                <Label className="text-lg font-medium flex items-center gap-2">
+                  <Mic className="h-5 w-5" />
+                  Notes (optional)
+                </Label>
+                <div className="flex gap-3">
+                  <Textarea
+                    placeholder="Any additional notes about the harvest..."
+                    value={harvestForm.notes}
+                    onChange={(e) => setHarvestForm({ ...harvestForm, notes: e.target.value })}
+                    className="min-h-[120px] text-lg"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="lg"
+                    onClick={startVoiceInput}
+                    disabled={isListening}
+                    className="h-16 w-16 flex-shrink-0"
+                  >
+                    <Mic className={`h-6 w-6 ${isListening ? 'text-red-500 animate-pulse' : ''}`} />
+                  </Button>
+                </div>
+              </div>
+              
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handlePhotoUpload}
+                className="hidden"
+                id="photo-upload"
+              />
+            </div>
+          </div>
+        );
+
+      case 5:
+        return (
+          <div className="space-y-8">
+            <div className="text-center space-y-2">
+              <CheckCircle className="h-16 w-16 mx-auto text-green-600" />
+              <h2 className="text-2xl font-bold">Review & Submit</h2>
+              <p className="text-muted-foreground">Check your harvest details</p>
+            </div>
+            
+            <div className="bg-green-50 border border-green-200 rounded-xl p-6 space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-sm text-green-700">Crop</Label>
+                  <p className="font-medium text-lg">{harvestForm.cropSpecies}</p>
+                </div>
+                <div>
+                  <Label className="text-sm text-green-700">Weight</Label>
+                  <p className="font-medium text-lg">{harvestForm.weight} kg</p>
+                </div>
+                <div>
+                  <Label className="text-sm text-green-700">Quantity</Label>
+                  <p className="font-medium text-lg">{harvestForm.quantity} units</p>
+                </div>
+                <div>
+                  <Label className="text-sm text-green-700">Location</Label>
+                  <p className="font-medium text-lg">{harvestForm.location || 'Not specified'}</p>
+                </div>
+              </div>
+              
+              {harvestForm.notes && (
+                <div>
+                  <Label className="text-sm text-green-700">Notes</Label>
+                  <p className="text-sm">{harvestForm.notes}</p>
+                </div>
+              )}
+              
+              {harvestForm.photo && (
+                <div className="flex items-center gap-2">
+                  <Camera className="h-4 w-4 text-green-600" />
+                  <span className="text-sm text-green-700">Photo attached</span>
+                </div>
+              )}
+            </div>
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-6xl mx-auto p-4 md:p-6 space-y-6">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
+      <div className="max-w-4xl mx-auto p-4 md:p-6 space-y-6">
         {/* Header Section */}
-        <div className="bg-card rounded-lg border p-6">
+        <div className="bg-white rounded-2xl shadow-sm p-6 border border-green-100">
           <div className="flex items-center gap-4 mb-6">
-            <div className="p-3 bg-accent rounded-lg">
-              <Package className="h-6 w-6 text-accent-foreground" />
+            <div className="p-4 bg-green-100 rounded-xl">
+              <Leaf className="h-8 w-8 text-green-600" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-foreground">
-                {t('farmerPortal')}
+              <h1 className="text-3xl font-bold text-gray-900">
+                🌱 Farmer Portal
               </h1>
-              <p className="text-muted-foreground">
-                Record harvests and track your production
+              <p className="text-gray-600 text-lg">
+                Simple harvest recording for farmers
               </p>
             </div>
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { label: 'Total Harvests', value: harvests.length.toString(), icon: Package },
-              { label: 'Verified', value: harvests.filter(h => h.status === 'verified').length.toString(), icon: Calendar },
-              { label: 'Processed', value: harvests.filter(h => h.status === 'processed').length.toString(), icon: Weight },
-              { label: 'Quality Score', value: '95%', icon: Eye }
+              { label: 'Total Harvests', value: harvests.length.toString(), icon: Package, color: 'bg-blue-100 text-blue-600' },
+              { label: 'Verified', value: harvests.filter(h => h.status === 'verified').length.toString(), icon: CheckCircle, color: 'bg-green-100 text-green-600' },
+              { label: 'Total Weight', value: `${harvests.reduce((sum, h) => sum + h.weight, 0).toFixed(1)} kg`, icon: Weight, color: 'bg-yellow-100 text-yellow-600' },
+              { label: 'Quality Score', value: '95%', icon: Eye, color: 'bg-purple-100 text-purple-600' }
             ].map((stat, idx) => (
-              <div key={idx} className="bg-muted/50 rounded-lg p-4 text-center">
-                <stat.icon className="h-5 w-5 text-muted-foreground mx-auto mb-2" />
-                <div className="text-2xl font-bold text-foreground">{stat.value}</div>
-                <div className="text-sm text-muted-foreground">{stat.label}</div>
+              <div key={idx} className="bg-white border border-gray-200 rounded-xl p-6 text-center shadow-sm hover:shadow-md transition-shadow">
+                <stat.icon className={`h-8 w-8 mx-auto mb-3 ${stat.color}`} />
+                <div className="text-3xl font-bold text-gray-900 mb-1">{stat.value}</div>
+                <div className="text-sm text-gray-600 font-medium">{stat.label}</div>
               </div>
             ))}
           </div>
         </div>
 
         <Tabs defaultValue="new-harvest" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="new-harvest" className="flex items-center gap-2">
-              <Plus className="h-4 w-4" />
-              {t('newHarvest')}
+          <TabsList className="grid w-full grid-cols-3 h-16 bg-white border border-green-200 rounded-2xl p-2">
+            <TabsTrigger value="new-harvest" className="flex items-center gap-2 h-12 text-lg font-medium rounded-xl data-[state=active]:bg-green-100 data-[state=active]:text-green-700">
+              <Plus className="h-5 w-5" />
+              New Harvest
             </TabsTrigger>
-            <TabsTrigger value="past-harvests" className="flex items-center gap-2">
-              <Eye className="h-4 w-4" />
-              {t('pastHarvests')}
+            <TabsTrigger value="past-harvests" className="flex items-center gap-2 h-12 text-lg font-medium rounded-xl data-[state=active]:bg-green-100 data-[state=active]:text-green-700">
+              <Eye className="h-5 w-5" />
+              Past Harvests
             </TabsTrigger>
-            <TabsTrigger value="analytics" className="flex items-center gap-2">
-              <Calendar className="h-4 w-4" />
+            <TabsTrigger value="analytics" className="flex items-center gap-2 h-12 text-lg font-medium rounded-xl data-[state=active]:bg-green-100 data-[state=active]:text-green-700">
+              <Calendar className="h-5 w-5" />
               Analytics
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="new-harvest">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Package className="h-5 w-5" />
-                  {t('recordHarvest')}
-                </CardTitle>
-                <CardDescription>
-                  Record your harvest details with location and photos
-                </CardDescription>
+            <Card className="bg-white border-2 border-green-100 rounded-2xl shadow-sm">
+              <CardHeader className="text-center pb-2">
+                <div className="flex items-center justify-between mb-4">
+                  {currentStep > 1 && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="lg"
+                      onClick={prevStep}
+                      className="text-gray-600"
+                    >
+                      <ArrowLeft className="h-5 w-5 mr-2" />
+                      Back
+                    </Button>
+                  )}
+                  <div className="flex-1" />
+                  <div className="flex items-center gap-2">
+                    <HelpCircle className="h-5 w-5 text-gray-400" />
+                    <span className="text-sm text-gray-500">Step {currentStep} of {totalSteps}</span>
+                  </div>
+                </div>
+                
+                <div className="w-full bg-gray-200 rounded-full h-3 mb-6">
+                  <Progress value={(currentStep / totalSteps) * 100} className="h-3" />
+                </div>
               </CardHeader>
+              
               <CardContent>
-                <form onSubmit={handleSubmitHarvest} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="cropSpecies">
-                        {t('cropSpecies')} *
-                      </Label>
-                      <Select
-                        value={harvestForm.cropSpecies}
-                        onValueChange={(value) => setHarvestForm({ ...harvestForm, cropSpecies: value })}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select crop/species" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {cropOptions.map((crop) => (
-                            <SelectItem key={crop.value} value={crop.value}>
-                              <div className="flex items-center gap-2">
-                                <span>{crop.icon}</span>
-                                <span>{crop.value}</span>
-                              </div>
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="weight">
-                        Weight (kg) *
-                      </Label>
-                      <Input
-                        id="weight"
-                        type="number"
-                        step="0.1"
-                        placeholder="Enter weight in kg"
-                        value={harvestForm.weight}
-                        onChange={(e) => setHarvestForm({ ...harvestForm, weight: e.target.value })}
-                        required
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="quantity">
-                        Quantity (units) *
-                      </Label>
-                      <Input
-                        id="quantity"
-                        type="number"
-                        placeholder="Enter quantity"
-                        value={harvestForm.quantity}
-                        onChange={(e) => setHarvestForm({ ...harvestForm, quantity: e.target.value })}
-                        required
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="location" className="flex items-center gap-2">
-                        <MapPin className="h-4 w-4" />
-                        Location
-                      </Label>
-                      <div className="flex gap-2">
-                        <Input
-                          id="location"
-                          placeholder="Enter location or use GPS"
-                          value={harvestForm.location}
-                          onChange={(e) => setHarvestForm({ ...harvestForm, location: e.target.value })}
-                        />
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="icon"
-                          onClick={getCurrentLocation}
-                        >
-                          <MapPin className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="notes" className="flex items-center gap-2">
-                      <Mic className="h-4 w-4" />
-                      Notes
-                    </Label>
-                    <div className="flex gap-2">
-                      <Textarea
-                        id="notes"
-                        placeholder="Add any additional notes about the harvest..."
-                        value={harvestForm.notes}
-                        onChange={(e) => setHarvestForm({ ...harvestForm, notes: e.target.value })}
-                        className="min-h-[100px]"
-                      />
+                <form onSubmit={handleSubmitHarvest} className="min-h-[400px]">
+                  {renderStepContent()}
+                  
+                  <div className="mt-8 flex gap-4">
+                    {currentStep < totalSteps ? (
                       <Button
                         type="button"
-                        variant="outline"
-                        size="icon"
-                        onClick={startVoiceInput}
-                        disabled={isListening}
+                        onClick={nextStep}
+                        size="lg"
+                        className="w-full h-14 text-lg bg-green-600 hover:bg-green-700"
+                        disabled={
+                          (currentStep === 1 && !harvestForm.cropSpecies) ||
+                          (currentStep === 2 && (!harvestForm.weight || !harvestForm.quantity))
+                        }
                       >
-                        <Mic className={`h-4 w-4 ${isListening ? 'text-red-500' : ''}`} />
+                        Continue
+                        <ChevronRight className="h-5 w-5 ml-2" />
                       </Button>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label>Photo Documentation</Label>
-                    <div className="flex gap-2">
+                    ) : (
                       <Button
-                        type="button"
-                        variant="outline"
-                        onClick={startCamera}
-                        className="flex-1"
+                        type="submit"
+                        size="lg"
+                        className="w-full h-14 text-lg bg-green-600 hover:bg-green-700"
+                        disabled={!harvestForm.cropSpecies || !harvestForm.weight || !harvestForm.quantity}
                       >
-                        <Camera className="h-4 w-4 mr-2" />
-                        Take Photo
+                        <CheckCircle className="h-5 w-5 mr-2" />
+                        Submit Harvest
                       </Button>
-                      <div className="flex-1">
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={handlePhotoUpload}
-                          className="hidden"
-                          id="photo-upload"
-                        />
-                        <Button
-                          type="button"
-                          variant="outline"
-                          onClick={() => document.getElementById('photo-upload')?.click()}
-                          className="w-full"
-                        >
-                          <Upload className="h-4 w-4 mr-2" />
-                          Upload Photo
-                        </Button>
-                      </div>
-                    </div>
-                    {harvestForm.photo && (
-                      <div className="text-sm text-muted-foreground">
-                        Photo selected: {harvestForm.photo.name}
-                      </div>
                     )}
                   </div>
-
-                  <Button type="submit" className="w-full">
-                    Record Harvest
-                  </Button>
                 </form>
               </CardContent>
             </Card>
           </TabsContent>
 
           <TabsContent value="past-harvests">
-            <Card>
+            <Card className="bg-white border-2 border-green-100 rounded-2xl shadow-sm">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Eye className="h-5 w-5" />
-                  Past Harvests
+                <CardTitle className="flex items-center gap-3 text-2xl text-gray-900">
+                  <Eye className="h-7 w-7 text-green-600" />
+                  📚 Past Harvests
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-lg text-gray-600">
                   View and manage your previous harvest records
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                <div className="space-y-6">
                   {harvests.map((harvest) => (
-                    <div key={harvest.id} className="border rounded-lg p-4">
-                      <div className="flex items-start justify-between mb-3">
-                        <div>
-                          <h3 className="font-semibold text-lg">{harvest.cropSpecies}</h3>
-                          <p className="text-sm text-muted-foreground">
-                            {new Date(harvest.timestamp).toLocaleDateString()}
-                          </p>
+                    <div key={harvest.id} className="bg-white border-2 border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                          <div className="p-3 bg-green-100 rounded-lg">
+                            <Package className="h-6 w-6 text-green-600" />
+                          </div>
+                          <div>
+                            <h3 className="font-bold text-xl text-gray-900">{harvest.cropSpecies}</h3>
+                            <p className="text-gray-600 font-medium">
+                              {new Date(harvest.timestamp).toLocaleDateString()}
+                            </p>
+                          </div>
                         </div>
                         {getStatusBadge(harvest.status)}
                       </div>
                       
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
-                        <div>
-                          <p className="text-sm text-muted-foreground">Weight</p>
-                          <p className="font-medium">{harvest.weight} kg</p>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-4">
+                        <div className="text-center p-4 bg-gray-50 rounded-lg">
+                          <Weight className="h-6 w-6 text-gray-600 mx-auto mb-2" />
+                          <p className="text-sm text-gray-600 font-medium">Weight</p>
+                          <p className="font-bold text-lg text-gray-900">{harvest.weight} kg</p>
                         </div>
-                        <div>
-                          <p className="text-sm text-muted-foreground">Quantity</p>
-                          <p className="font-medium">{harvest.quantity} units</p>
+                        <div className="text-center p-4 bg-gray-50 rounded-lg">
+                          <Package className="h-6 w-6 text-gray-600 mx-auto mb-2" />
+                          <p className="text-sm text-gray-600 font-medium">Quantity</p>
+                          <p className="font-bold text-lg text-gray-900">{harvest.quantity} units</p>
                         </div>
-                        <div className="col-span-2">
-                          <p className="text-sm text-muted-foreground">Location</p>
-                          <p className="font-medium text-sm">{harvest.location}</p>
+                        <div className="text-center p-4 bg-gray-50 rounded-lg col-span-2 md:col-span-1">
+                          <MapPin className="h-6 w-6 text-gray-600 mx-auto mb-2" />
+                          <p className="text-sm text-gray-600 font-medium">Location</p>
+                          <p className="font-bold text-sm text-gray-900">{harvest.location}</p>
                         </div>
                       </div>
                       
                       {harvest.notes && (
-                        <div className="mb-3">
-                          <p className="text-sm text-muted-foreground">Notes</p>
-                          <p className="text-sm">{harvest.notes}</p>
+                        <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                          <p className="text-sm text-blue-700 font-medium mb-1">Notes</p>
+                          <p className="text-blue-800">{harvest.notes}</p>
                         </div>
                       )}
                       
                       <Button
                         variant="outline"
-                        size="sm"
+                        size="lg"
                         onClick={() => generateCertificate(harvest)}
+                        className="w-full h-12 border-2 border-green-200 hover:border-green-400 text-green-700 hover:text-green-800"
                       >
-                        <Download className="h-4 w-4 mr-2" />
+                        <Download className="h-5 w-5 mr-2" />
                         Download Certificate
                       </Button>
                     </div>
@@ -672,17 +847,30 @@ const FarmerDashboard = () => {
 
         {/* Camera Modal */}
         {showCamera && (
-          <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center">
-            <div className="bg-card rounded-lg p-6 max-w-md w-full mx-4">
-              <h3 className="text-lg font-semibold mb-4">Take Photo</h3>
-              <video ref={videoRef} autoPlay className="w-full rounded-lg mb-4" />
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl p-6 max-w-md w-full mx-4 shadow-2xl">
+              <div className="text-center mb-4">
+                <Camera className="h-12 w-12 mx-auto text-green-600 mb-2" />
+                <h3 className="text-2xl font-bold text-gray-900">📸 Take Photo</h3>
+                <p className="text-gray-600">Position your camera to capture the harvest</p>
+              </div>
+              <video ref={videoRef} autoPlay className="w-full rounded-xl mb-6 border-2 border-gray-200" />
               <canvas ref={canvasRef} className="hidden" />
-              <div className="flex gap-2">
-                <Button onClick={capturePhoto} className="flex-1">
-                  <Camera className="h-4 w-4 mr-2" />
+              <div className="flex gap-3">
+                <Button 
+                  onClick={capturePhoto} 
+                  size="lg"
+                  className="flex-1 h-14 bg-green-600 hover:bg-green-700 text-lg"
+                >
+                  <Camera className="h-5 w-5 mr-2" />
                   Capture
                 </Button>
-                <Button variant="outline" onClick={stopCamera}>
+                <Button 
+                  variant="outline" 
+                  onClick={stopCamera}
+                  size="lg"
+                  className="h-14 px-6 border-2"
+                >
                   Cancel
                 </Button>
               </div>
