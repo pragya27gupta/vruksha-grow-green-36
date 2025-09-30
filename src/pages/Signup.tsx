@@ -19,6 +19,7 @@ const Signup = () => {
   const [formData, setFormData] = useState({
     name: '',
     emailOrPhone: '', // Changed from email to emailOrPhone
+    aadhaar: '',
     password: '',
     confirmPassword: '',
     role: '' as UserRole | ''
@@ -37,10 +38,20 @@ const Signup = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.name || !formData.emailOrPhone || !formData.password || !formData.role) {
+    if (!formData.name || !formData.emailOrPhone || !formData.aadhaar || !formData.password || !formData.role) {
       toast({
         title: "Error",
         description: "Please fill in all fields",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Validate Aadhaar card number (12 digits)
+    if (!/^\d{12}$/.test(formData.aadhaar)) {
+      toast({
+        title: "Error",
+        description: "Please enter a valid 12-digit Aadhaar number",
         variant: "destructive"
       });
       return;
@@ -199,6 +210,25 @@ const Signup = () => {
               />
               <p className="text-xs text-muted-foreground">
                 Enter your email address or 10-digit phone number
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="aadhaar">Aadhaar Card Number</Label>
+              <Input
+                id="aadhaar"
+                type="text"
+                value={formData.aadhaar}
+                onChange={(e) => {
+                  let value = e.target.value.replace(/\D/g, ''); // Only allow digits
+                  value = value.slice(0, 12); // Limit to 12 digits
+                  setFormData({ ...formData, aadhaar: value });
+                }}
+                placeholder="Enter 12-digit Aadhaar number"
+                maxLength={12}
+              />
+              <p className="text-xs text-muted-foreground">
+                Enter your 12-digit Aadhaar card number
               </p>
             </div>
 
