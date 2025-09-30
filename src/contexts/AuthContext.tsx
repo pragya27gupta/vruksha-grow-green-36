@@ -15,6 +15,8 @@ interface AuthContextType {
   login: (email: string, password: string, role: UserRole) => Promise<boolean>;
   loginWithPhone: (phone: string, role: UserRole) => Promise<boolean>;
   signup: (email: string, password: string, role: UserRole, name?: string, phone?: string) => Promise<boolean>;
+  forgotPassword: (emailOrPhone: string) => Promise<{ success: boolean; method: 'email' | 'phone' | null; message: string }>;
+  resetPassword: (emailOrPhone: string, otp: string, newPassword: string) => Promise<boolean>;
   logout: () => void;
   isAuthenticated: boolean;
 }
@@ -149,6 +151,67 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const forgotPassword = async (emailOrPhone: string): Promise<{ success: boolean; method: 'email' | 'phone' | null; message: string }> => {
+    try {
+      const users = JSON.parse(localStorage.getItem('vrukshachain_users') || '[]');
+      
+      // Check if it's an email
+      const isEmail = emailOrPhone.includes('@');
+      
+      let foundUser;
+      if (isEmail) {
+        foundUser = users.find((u: any) => u.email === emailOrPhone);
+      } else {
+        // Assume it's a phone number
+        foundUser = users.find((u: any) => u.phone === emailOrPhone);
+      }
+      
+      if (foundUser) {
+        // In a real app, this would send an actual OTP
+        const method = isEmail ? 'email' : 'phone';
+        const message = isEmail 
+          ? `Reset code sent to ${emailOrPhone}` 
+          : `Reset code sent to +91 ${emailOrPhone}`;
+        
+        return { success: true, method, message };
+      } else {
+        return { 
+          success: false, 
+          method: null, 
+          message: isEmail ? 'Email not found' : 'Phone number not found' 
+        };
+      }
+    } catch (error) {
+      return { success: false, method: null, message: 'Failed to process request' };
+    }
+  };
+
+  const resetPassword = async (emailOrPhone: string, otp: string, newPassword: string): Promise<boolean> => {
+    try {
+      // In a real app, you would verify the OTP first
+      if (otp !== '123456') {
+        return false;
+      }
+      
+      const users = JSON.parse(localStorage.getItem('vrukshachain_users') || '[]');
+      const isEmail = emailOrPhone.includes('@');
+      
+      const userIndex = users.findIndex((u: any) => 
+        isEmail ? u.email === emailOrPhone : u.phone === emailOrPhone
+      );
+      
+      if (userIndex !== -1) {
+        users[userIndex].password = newPassword;
+        localStorage.setItem('vrukshachain_users', JSON.stringify(users));
+        return true;
+      }
+      
+      return false;
+    } catch (error) {
+      return false;
+    }
+  };
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem('vrukshachain_user');
@@ -159,6 +222,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     login,
     loginWithPhone,
     signup,
+    forgotPassword,
+    resetPassword,
     logout,
     isAuthenticated: !!user
   };
