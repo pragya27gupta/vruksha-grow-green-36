@@ -369,8 +369,8 @@ const FarmerDashboard = () => {
           <div className="space-y-6">
             <div className="text-center space-y-2">
               <Sprout className="h-16 w-16 mx-auto text-green-600" />
-              <h2 className="text-2xl font-bold">Choose Your Crop</h2>
-              <p className="text-muted-foreground">Select the crop you're harvesting today</p>
+              <h2 className="text-2xl font-bold">{t('chooseYourCrop')}</h2>
+              <p className="text-muted-foreground">{t('selectCropHelp')}</p>
             </div>
             
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -401,13 +401,13 @@ const FarmerDashboard = () => {
           <div className="space-y-8">
             <div className="text-center space-y-2">
               <Weight className="h-16 w-16 mx-auto text-green-600" />
-              <h2 className="text-2xl font-bold">Measurements</h2>
-              <p className="text-muted-foreground">How much did you harvest?</p>
+              <h2 className="text-2xl font-bold">{t('measurements')}</h2>
+              <p className="text-muted-foreground">{t('measurementsHelp')}</p>
             </div>
             
             <div className="space-y-6">
               <div className="space-y-3">
-                <Label className="text-lg font-medium">Weight (kg) *</Label>
+                <Label className="text-lg font-medium">{t('weightInKg')} *</Label>
                 <Input
                   type="number"
                   step="0.1"
@@ -419,7 +419,7 @@ const FarmerDashboard = () => {
               </div>
               
               <div className="space-y-3">
-                <Label className="text-lg font-medium">Quantity (units) *</Label>
+                <Label className="text-lg font-medium">{t('quantityUnits')} *</Label>
                 <Input
                   type="number"
                   placeholder="0"
@@ -437,8 +437,8 @@ const FarmerDashboard = () => {
           <div className="space-y-8">
             <div className="text-center space-y-2">
               <MapPin className="h-16 w-16 mx-auto text-green-600" />
-              <h2 className="text-2xl font-bold">Location</h2>
-              <p className="text-muted-foreground">Where did you harvest this crop?</p>
+              <h2 className="text-2xl font-bold">{t('locationInfo')}</h2>
+              <p className="text-muted-foreground">{t('locationHelp')}</p>
             </div>
             
             <div className="space-y-6">
@@ -450,15 +450,15 @@ const FarmerDashboard = () => {
                 className="w-full h-16 text-lg border-2 border-green-200 hover:border-green-400"
               >
                 <MapPin className="h-6 w-6 mr-3" />
-                Use GPS Location
+                {t('useGPS')}
               </Button>
               
-              <div className="text-center text-muted-foreground">or</div>
+              <div className="text-center text-muted-foreground">{t('manualEntry')}</div>
               
               <div className="space-y-3">
-                <Label className="text-lg font-medium">Enter location manually</Label>
+                <Label className="text-lg font-medium">{t('locationPlaceholder')}</Label>
                 <Input
-                  placeholder="Field name, village, etc."
+                  placeholder={t('locationPlaceholder')}
                   value={harvestForm.location}
                   onChange={(e) => setHarvestForm({ ...harvestForm, location: e.target.value })}
                   className="h-14 text-lg"
@@ -473,8 +473,8 @@ const FarmerDashboard = () => {
           <div className="space-y-8">
             <div className="text-center space-y-2">
               <Camera className="h-16 w-16 mx-auto text-green-600" />
-              <h2 className="text-2xl font-bold">Documentation</h2>
-              <p className="text-muted-foreground">Add photos and notes</p>
+              <h2 className="text-2xl font-bold">{t('documentationStep')}</h2>
+              <p className="text-muted-foreground">{t('documentationHelp')}</p>
             </div>
             
             <div className="space-y-6">
@@ -487,7 +487,7 @@ const FarmerDashboard = () => {
                   className="h-24 border-2 border-green-200 hover:border-green-400 flex-col"
                 >
                   <Camera className="h-8 w-8 mb-2" />
-                  Take Photo
+                  {t('takePhoto')}
                 </Button>
                 
                 <Button
@@ -498,7 +498,7 @@ const FarmerDashboard = () => {
                   className="h-24 border-2 border-green-200 hover:border-green-400 flex-col"
                 >
                   <Upload className="h-8 w-8 mb-2" />
-                  Upload Photo
+                  {t('uploadFromDevice')}
                 </Button>
               </div>
               
@@ -506,7 +506,7 @@ const FarmerDashboard = () => {
                 <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
                   <div className="flex items-center gap-2">
                     <CheckCircle className="h-5 w-5 text-green-600" />
-                    <span className="text-green-800">Photo ready: {harvestForm.photo.name}</span>
+                    <span className="text-green-800">{t('photoAttached')}: {harvestForm.photo.name}</span>
                   </div>
                 </div>
               )}
@@ -514,11 +514,11 @@ const FarmerDashboard = () => {
               <div className="space-y-3">
                 <Label className="text-lg font-medium flex items-center gap-2">
                   <Mic className="h-5 w-5" />
-                  Notes (optional)
+                  {t('notes')} ({t('optional')})
                 </Label>
                 <div className="flex gap-3">
                   <Textarea
-                    placeholder="Any additional notes about the harvest..."
+                    placeholder={t('notesPlaceholder')}
                     value={harvestForm.notes}
                     onChange={(e) => setHarvestForm({ ...harvestForm, notes: e.target.value })}
                     className="min-h-[120px] text-lg"
@@ -552,33 +552,33 @@ const FarmerDashboard = () => {
           <div className="space-y-8">
             <div className="text-center space-y-2">
               <CheckCircle className="h-16 w-16 mx-auto text-green-600" />
-              <h2 className="text-2xl font-bold">Review & Submit</h2>
-              <p className="text-muted-foreground">Check your harvest details</p>
+              <h2 className="text-2xl font-bold">{t('reviewSubmit')}</h2>
+              <p className="text-muted-foreground">{t('reviewHelp')}</p>
             </div>
             
             <div className="bg-green-50 border border-green-200 rounded-xl p-6 space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-sm text-green-700">Crop</Label>
+                  <Label className="text-sm text-green-700">{t('crop')}</Label>
                   <p className="font-medium text-lg">{harvestForm.cropSpecies}</p>
                 </div>
                 <div>
-                  <Label className="text-sm text-green-700">Weight</Label>
-                  <p className="font-medium text-lg">{harvestForm.weight} kg</p>
+                  <Label className="text-sm text-green-700">{t('weight')}</Label>
+                  <p className="font-medium text-lg">{harvestForm.weight} {t('kg')}</p>
                 </div>
                 <div>
-                  <Label className="text-sm text-green-700">Quantity</Label>
-                  <p className="font-medium text-lg">{harvestForm.quantity} units</p>
+                  <Label className="text-sm text-green-700">{t('quantity')}</Label>
+                  <p className="font-medium text-lg">{harvestForm.quantity} {t('units')}</p>
                 </div>
                 <div>
-                  <Label className="text-sm text-green-700">Location</Label>
-                  <p className="font-medium text-lg">{harvestForm.location || 'Not specified'}</p>
+                  <Label className="text-sm text-green-700">{t('location')}</Label>
+                  <p className="font-medium text-lg">{harvestForm.location || t('notSpecified')}</p>
                 </div>
               </div>
               
               {harvestForm.notes && (
                 <div>
-                  <Label className="text-sm text-green-700">Notes</Label>
+                  <Label className="text-sm text-green-700">{t('notes')}</Label>
                   <p className="text-sm">{harvestForm.notes}</p>
                 </div>
               )}
@@ -586,7 +586,7 @@ const FarmerDashboard = () => {
               {harvestForm.photo && (
                 <div className="flex items-center gap-2">
                   <Camera className="h-4 w-4 text-green-600" />
-                  <span className="text-sm text-green-700">Photo attached</span>
+                  <span className="text-sm text-green-700">{t('photoAttached')}</span>
                 </div>
               )}
             </div>
@@ -609,20 +609,20 @@ const FarmerDashboard = () => {
             </div>
             <div>
               <h1 className="text-3xl font-bold text-gray-900">
-                🌱 Farmer Portal
+                🌱 {t('farmerPortal')}
               </h1>
               <p className="text-gray-600 text-lg">
-                Simple harvest recording for farmers
+                {t('simpleHarvestRecording')}
               </p>
             </div>
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { label: 'Total Harvests', value: harvests.length.toString(), icon: Package, color: 'bg-blue-100 text-blue-600' },
-              { label: 'Verified', value: harvests.filter(h => h.status === 'verified').length.toString(), icon: CheckCircle, color: 'bg-green-100 text-green-600' },
-              { label: 'Total Weight', value: `${harvests.reduce((sum, h) => sum + h.weight, 0).toFixed(1)} kg`, icon: Weight, color: 'bg-yellow-100 text-yellow-600' },
-              { label: 'Quality Score', value: '95%', icon: Eye, color: 'bg-purple-100 text-purple-600' }
+              { label: t('totalHarvests'), value: harvests.length.toString(), icon: Package, color: 'bg-blue-100 text-blue-600' },
+              { label: t('verified'), value: harvests.filter(h => h.status === 'verified').length.toString(), icon: CheckCircle, color: 'bg-green-100 text-green-600' },
+              { label: t('totalWeight'), value: `${harvests.reduce((sum, h) => sum + h.weight, 0).toFixed(1)} ${t('kg')}`, icon: Weight, color: 'bg-yellow-100 text-yellow-600' },
+              { label: t('qualityScore'), value: '95%', icon: Eye, color: 'bg-purple-100 text-purple-600' }
             ].map((stat, idx) => (
               <div key={idx} className="bg-white border border-gray-200 rounded-xl p-6 text-center shadow-sm hover:shadow-md transition-shadow">
                 <stat.icon className={`h-8 w-8 mx-auto mb-3 ${stat.color}`} />
@@ -637,15 +637,15 @@ const FarmerDashboard = () => {
           <TabsList className="grid w-full grid-cols-3 h-16 bg-white border border-green-200 rounded-2xl p-2">
             <TabsTrigger value="new-harvest" className="flex items-center gap-2 h-12 text-lg font-medium rounded-xl data-[state=active]:bg-green-100 data-[state=active]:text-green-700">
               <Plus className="h-5 w-5" />
-              New Harvest
+              {t('newHarvest')}
             </TabsTrigger>
             <TabsTrigger value="past-harvests" className="flex items-center gap-2 h-12 text-lg font-medium rounded-xl data-[state=active]:bg-green-100 data-[state=active]:text-green-700">
               <Eye className="h-5 w-5" />
-              Past Harvests
+              {t('pastHarvests')}
             </TabsTrigger>
             <TabsTrigger value="analytics" className="flex items-center gap-2 h-12 text-lg font-medium rounded-xl data-[state=active]:bg-green-100 data-[state=active]:text-green-700">
               <Calendar className="h-5 w-5" />
-              Analytics
+              {t('analyticsTab')}
             </TabsTrigger>
           </TabsList>
 

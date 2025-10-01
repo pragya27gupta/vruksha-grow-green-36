@@ -6,12 +6,12 @@ const Footer = () => {
   
   // Essential links only for mobile-first design
   const essentialLinks = [
-    { name: t('about'), href: "#" },
+              { name: t('about'), href: "#" },
     { name: t('contact'), href: "#" },
-    { name: "Partnership", href: "#" },
-    { name: "EUDR", href: "#" },
-    { name: "Case Studies", href: "#" },
-    { name: "Dairy Chain", href: "#" }
+    { name: t('partnership'), href: "#" },
+    { name: t('eudr'), href: "#" },
+    { name: t('caseStudies'), href: "#" },
+    { name: t('dairyChain'), href: "#" }
   ];
 
   return (
@@ -41,7 +41,7 @@ const Footer = () => {
           {/* Newsletter - Compact */}
           <div className="text-center mb-4">
             <p className="text-primary-foreground/80 text-xs">
-              Subscribe to VrukshaChain Times
+              {t('subscribeToVrukshaChain')}
             </p>
           </div>
         </div>
@@ -58,22 +58,21 @@ const Footer = () => {
                 <span className="text-2xl font-bold">VrukshaChain</span>
               </div>
               <p className="text-primary-foreground/80 mb-6 max-w-md">
-                Revolutionizing agricultural supply chains with blockchain technology. 
-                Ensuring transparency, traceability, and trust from farm to fork.
+                {t('revolutionizingSupplyChains')}
               </p>
               <div className="space-y-2">
-                <h4 className="font-semibold text-lg">Newsletter</h4>
+                <h4 className="font-semibold text-lg">{t('newsletter')}</h4>
                 <p className="text-primary-foreground/80 text-sm">
-                  Subscribe to VrukshaChain Times for the latest updates
+                  {t('subscribeNewsletter')}
                 </p>
                 <div className="flex gap-2 max-w-sm">
                   <input 
                     type="email" 
-                    placeholder="Enter your email"
+                    placeholder={t('enterYourEmail')}
                     className="flex-1 px-3 py-2 rounded bg-primary-foreground/10 border border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/60 text-sm"
                   />
                   <button className="px-4 py-2 bg-accent text-accent-foreground rounded hover:bg-accent/90 transition-colors text-sm font-medium">
-                    Subscribe
+                    {t('subscribe')}
                   </button>
                 </div>
               </div>
@@ -81,49 +80,49 @@ const Footer = () => {
 
             {/* Quick Links */}
             <div>
-              <h4 className="font-semibold text-lg mb-4">Quick Links</h4>
+              <h4 className="font-semibold text-lg mb-4">{t('quickLinksTitle')}</h4>
               <ul className="space-y-2">
                 <li><a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">{t('about')}</a></li>
-                <li><a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">Features</a></li>
-                <li><a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">Case Studies</a></li>
-                <li><a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">Blog</a></li>
+                <li><a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">{t('featuresLink')}</a></li>
+                <li><a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">{t('caseStudies')}</a></li>
+                <li><a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">{t('blog')}</a></li>
                 <li><a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">{t('contact')}</a></li>
               </ul>
             </div>
 
             {/* Solutions */}
             <div>
-              <h4 className="font-semibold text-lg mb-4">Solutions</h4>
+              <h4 className="font-semibold text-lg mb-4">{t('solutionsTitle')}</h4>
               <ul className="space-y-2">
-                <li><a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">Dairy Chain</a></li>
-                <li><a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">EUDR Compliance</a></li>
-                <li><a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">Partnership</a></li>
-                <li><a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">Traceability</a></li>
-                <li><a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">Quality Control</a></li>
+                <li><a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">{t('dairyChain')}</a></li>
+                <li><a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">{t('eudrCompliance')}</a></li>
+                <li><a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">{t('partnership')}</a></li>
+                <li><a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">{t('traceability')}</a></li>
+                <li><a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">{t('qualityControl')}</a></li>
               </ul>
             </div>
 
             {/* Contact & Social */}
             <div>
-              <h4 className="font-semibold text-lg mb-4">Connect</h4>
+              <h4 className="font-semibold text-lg mb-4">{t('connectTitle')}</h4>
               <div className="space-y-4">
                 <div>
-                  <p className="text-primary-foreground/80 text-sm mb-2">Email</p>
+                  <p className="text-primary-foreground/80 text-sm mb-2">{t('emailTitle')}</p>
                   <a href="mailto:info@vrukshachain.com" className="text-accent hover:text-accent/80 transition-colors">
                     info@vrukshachain.com
                   </a>
                 </div>
                 <div>
-                  <p className="text-primary-foreground/80 text-sm mb-2">Follow Us</p>
+                  <p className="text-primary-foreground/80 text-sm mb-2">{t('followUs')}</p>
                   <div className="flex gap-3">
                     <a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">
-                      LinkedIn
+                      {t('linkedin')}
                     </a>
                     <a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">
-                      Twitter
+                      {t('twitter')}
                     </a>
                     <a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">
-                      Facebook
+                      {t('facebook')}
                     </a>
                   </div>
                 </div>
