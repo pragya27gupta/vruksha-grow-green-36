@@ -75,7 +75,7 @@ const Header = () => {
           {/* Right side - Always visible */}
           <div className="flex items-center gap-1 sm:gap-2 lg:gap-4 flex-shrink-0">
             <div className="hidden xl:flex items-center gap-2 text-xs lg:text-sm text-muted-foreground bg-accent/10 px-2 lg:px-4 py-1 lg:py-2 rounded-full border border-accent/20">
-              <span className="text-accent font-medium">📞 +91 99725 24322</span>
+              <span className="text-accent font-medium">📞 +91 9876543210</span>
             </div>
             
             <div className="block">
@@ -164,7 +164,7 @@ const Header = () => {
 
               {/* Mobile Auth Buttons - Only Request Demo */}
               <div className="border-t border-border pt-4 space-y-3">
-                <div className="text-xs text-muted-foreground text-center">📞 +91 99725 24322</div>
+                <div className="text-xs text-muted-foreground text-center">📞 +91 9876543210</div>
                 
                 {!user && (
                   <Button 
