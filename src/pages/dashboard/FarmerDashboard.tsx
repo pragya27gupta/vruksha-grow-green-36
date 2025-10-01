@@ -343,9 +343,9 @@ const FarmerDashboard = () => {
     const Icon = config.icon;
     
     return (
-      <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium ${config.color}`}>
-        <Icon className="h-4 w-4" />
-        {status.charAt(0).toUpperCase() + status.slice(1)}
+      <div className={`inline-flex items-center gap-1 md:gap-2 px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium ${config.color} flex-shrink-0`}>
+        <Icon className="h-3 w-3 md:h-4 md:w-4" />
+        <span className="whitespace-nowrap">{status.charAt(0).toUpperCase() + status.slice(1)}</span>
       </div>
     );
   };
@@ -603,31 +603,31 @@ const FarmerDashboard = () => {
       <div className="max-w-7xl mx-auto p-4 md:p-6 lg:p-8 space-y-6">
         {/* Header Section */}
         <div className="bg-white rounded-2xl shadow-sm p-6 border border-green-100">
-          <div className="flex items-center gap-4 mb-6">
-            <div className="p-4 bg-green-100 rounded-xl">
-              <Leaf className="h-8 w-8 text-green-600" />
+          <div className="flex items-center gap-3 md:gap-4 mb-4 md:mb-6">
+            <div className="p-3 md:p-4 bg-green-100 rounded-xl flex-shrink-0">
+              <Leaf className="h-6 w-6 md:h-8 md:w-8 text-green-600" />
             </div>
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">
+            <div className="min-w-0 flex-1">
+              <h1 className="text-xl md:text-3xl font-bold text-gray-900 truncate">
                 🌱 {t('farmerPortal')}
               </h1>
-              <p className="text-gray-600 text-lg">
+              <p className="text-gray-600 text-sm md:text-lg line-clamp-2">
                 {t('simpleHarvestRecording')}
               </p>
             </div>
           </div>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 lg:gap-6">
             {[
               { label: t('totalHarvests'), value: harvests.length.toString(), icon: Package, color: 'bg-blue-100 text-blue-600' },
               { label: t('verified'), value: harvests.filter(h => h.status === 'verified').length.toString(), icon: CheckCircle, color: 'bg-green-100 text-green-600' },
-              { label: t('totalWeight'), value: `${harvests.reduce((sum, h) => sum + h.weight, 0).toFixed(1)} ${t('kg')}`, icon: Weight, color: 'bg-yellow-100 text-yellow-600' },
+              { label: 'Total Weight', value: `${harvests.reduce((sum, h) => sum + h.weight, 0).toFixed(1)} kg`, icon: Weight, color: 'bg-yellow-100 text-yellow-600' },
               { label: t('qualityScore'), value: '95%', icon: Eye, color: 'bg-purple-100 text-purple-600' }
             ].map((stat, idx) => (
-              <div key={idx} className="bg-white border border-gray-200 rounded-xl p-6 text-center shadow-sm hover:shadow-md transition-shadow">
-                <stat.icon className={`h-8 w-8 mx-auto mb-3 ${stat.color}`} />
-                <div className="text-3xl font-bold text-gray-900 mb-1">{stat.value}</div>
-                <div className="text-sm text-gray-600 font-medium">{stat.label}</div>
+              <div key={idx} className="bg-white border border-gray-200 rounded-xl p-3 md:p-6 text-center shadow-sm hover:shadow-md transition-shadow">
+                <stat.icon className={`h-6 w-6 md:h-8 md:w-8 mx-auto mb-2 md:mb-3 ${stat.color}`} />
+                <div className="text-xl md:text-3xl font-bold text-gray-900 mb-1 truncate">{stat.value}</div>
+                <div className="text-xs md:text-sm text-gray-600 font-medium truncate">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -645,7 +645,7 @@ const FarmerDashboard = () => {
             </TabsTrigger>
             <TabsTrigger value="analytics" className="flex items-center gap-1 md:gap-2 h-10 md:h-12 text-xs md:text-lg font-medium rounded-xl data-[state=active]:bg-green-100 data-[state=active]:text-green-700 px-2 md:px-3">
               <Calendar className="h-4 w-4 md:h-5 md:w-5 flex-shrink-0" />
-              <span className="truncate">{t('analyticsTab')}</span>
+              <span className="truncate">Analytics</span>
             </TabsTrigger>
           </TabsList>
 
@@ -727,15 +727,15 @@ const FarmerDashboard = () => {
               <CardContent>
                 <div className="space-y-6">
                   {harvests.map((harvest) => (
-                    <div key={harvest.id} className="bg-white border-2 border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="flex items-center gap-3">
-                          <div className="p-3 bg-green-100 rounded-lg">
-                            <Package className="h-6 w-6 text-green-600" />
+                    <div key={harvest.id} className="bg-white border-2 border-gray-200 rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
+                      <div className="flex items-start justify-between gap-2 mb-4 flex-wrap md:flex-nowrap">
+                        <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-1">
+                          <div className="p-2 md:p-3 bg-green-100 rounded-lg flex-shrink-0">
+                            <Package className="h-5 w-5 md:h-6 md:w-6 text-green-600" />
                           </div>
-                          <div>
-                            <h3 className="font-bold text-xl text-gray-900">{harvest.cropSpecies}</h3>
-                            <p className="text-gray-600 font-medium">
+                          <div className="min-w-0 flex-1">
+                            <h3 className="font-bold text-base md:text-xl text-gray-900 truncate">{harvest.cropSpecies}</h3>
+                            <p className="text-gray-600 text-sm md:font-medium">
                               {new Date(harvest.timestamp).toLocaleDateString()}
                             </p>
                           </div>
@@ -743,28 +743,28 @@ const FarmerDashboard = () => {
                         {getStatusBadge(harvest.status)}
                       </div>
                       
-                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 lg:gap-6 mb-4">
-                        <div className="text-center p-4 bg-gray-50 rounded-lg">
-                          <Weight className="h-6 w-6 text-gray-600 mx-auto mb-2" />
-                          <p className="text-sm text-gray-600 font-medium">Weight</p>
-                          <p className="font-bold text-lg text-gray-900">{harvest.weight} kg</p>
+                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 md:gap-4 lg:gap-6 mb-4">
+                        <div className="text-center p-3 md:p-4 bg-gray-50 rounded-lg">
+                          <Weight className="h-5 w-5 md:h-6 md:w-6 text-gray-600 mx-auto mb-2" />
+                          <p className="text-xs md:text-sm text-gray-600 font-medium">Weight</p>
+                          <p className="font-bold text-sm md:text-lg text-gray-900 truncate">{harvest.weight} kg</p>
                         </div>
-                        <div className="text-center p-4 bg-gray-50 rounded-lg">
-                          <Package className="h-6 w-6 text-gray-600 mx-auto mb-2" />
-                          <p className="text-sm text-gray-600 font-medium">Quantity</p>
-                          <p className="font-bold text-lg text-gray-900">{harvest.quantity} units</p>
+                        <div className="text-center p-3 md:p-4 bg-gray-50 rounded-lg">
+                          <Package className="h-5 w-5 md:h-6 md:w-6 text-gray-600 mx-auto mb-2" />
+                          <p className="text-xs md:text-sm text-gray-600 font-medium">Quantity</p>
+                          <p className="font-bold text-sm md:text-lg text-gray-900 truncate">{harvest.quantity} units</p>
                         </div>
-                        <div className="text-center p-4 bg-gray-50 rounded-lg col-span-2 md:col-span-1">
-                          <MapPin className="h-6 w-6 text-gray-600 mx-auto mb-2" />
-                          <p className="text-sm text-gray-600 font-medium">Location</p>
-                          <p className="font-bold text-sm text-gray-900">{harvest.location}</p>
+                        <div className="text-center p-3 md:p-4 bg-gray-50 rounded-lg col-span-2 md:col-span-1">
+                          <MapPin className="h-5 w-5 md:h-6 md:w-6 text-gray-600 mx-auto mb-2" />
+                          <p className="text-xs md:text-sm text-gray-600 font-medium">Location</p>
+                          <p className="font-bold text-xs md:text-sm text-gray-900 break-words line-clamp-2">{harvest.location}</p>
                         </div>
                       </div>
                       
                       {harvest.notes && (
-                        <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                          <p className="text-sm text-blue-700 font-medium mb-1">Notes</p>
-                          <p className="text-blue-800">{harvest.notes}</p>
+                        <div className="mb-4 p-3 md:p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                          <p className="text-xs md:text-sm text-blue-700 font-medium mb-1">Notes</p>
+                          <p className="text-sm md:text-base text-blue-800 break-words">{harvest.notes}</p>
                         </div>
                       )}
                       
@@ -772,9 +772,9 @@ const FarmerDashboard = () => {
                         variant="outline"
                         size="lg"
                         onClick={() => generateCertificate(harvest)}
-                        className="w-full h-12 border-2 border-green-200 hover:border-green-400 text-green-700 hover:text-green-800"
+                        className="w-full h-10 md:h-12 border-2 border-green-200 hover:border-green-400 text-green-700 hover:text-green-800 text-sm md:text-base"
                       >
-                        <Download className="h-5 w-5 mr-2" />
+                        <Download className="h-4 w-4 md:h-5 md:w-5 mr-2" />
                         Download Certificate
                       </Button>
                     </div>
