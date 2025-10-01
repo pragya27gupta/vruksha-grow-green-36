@@ -23,7 +23,7 @@ const Contact = () => {
     {
       icon: <Phone className="w-6 h-6 text-blue-600" />,
       title: t('phone'),
-      content: "+91 99725 24322",
+      content: "+91 9876543210",
       description: t('callUs')
     },
     {
