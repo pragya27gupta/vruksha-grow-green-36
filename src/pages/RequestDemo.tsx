@@ -121,7 +121,7 @@ const RequestDemo = () => {
                     <Phone className="w-5 h-5 text-accent" />
                     <div>
                       <p className="text-sm font-medium">Phone</p>
-                      <p className="text-sm text-muted-foreground">+91 99725 24322</p>
+                      <p className="text-sm text-muted-foreground">+91 9876543210</p>
                     </div>
                   </div>
                 </CardContent>
