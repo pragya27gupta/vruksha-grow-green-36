@@ -373,7 +373,7 @@ const FarmerDashboard = () => {
               <p className="text-muted-foreground">{t('selectCropHelp')}</p>
             </div>
             
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
               {cropOptions.map((crop) => (
                 <button
                   key={crop.value}
@@ -478,7 +478,7 @@ const FarmerDashboard = () => {
             </div>
             
             <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <Button
                   type="button"
                   variant="outline"
@@ -600,7 +600,7 @@ const FarmerDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
-      <div className="max-w-4xl mx-auto p-4 md:p-6 space-y-6">
+      <div className="max-w-7xl mx-auto p-4 md:p-6 lg:p-8 space-y-6">
         {/* Header Section */}
         <div className="bg-white rounded-2xl shadow-sm p-6 border border-green-100">
           <div className="flex items-center gap-4 mb-6">
@@ -617,7 +617,7 @@ const FarmerDashboard = () => {
             </div>
           </div>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
             {[
               { label: t('totalHarvests'), value: harvests.length.toString(), icon: Package, color: 'bg-blue-100 text-blue-600' },
               { label: t('verified'), value: harvests.filter(h => h.status === 'verified').length.toString(), icon: CheckCircle, color: 'bg-green-100 text-green-600' },
@@ -743,7 +743,7 @@ const FarmerDashboard = () => {
                         {getStatusBadge(harvest.status)}
                       </div>
                       
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-4">
+                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 lg:gap-6 mb-4">
                         <div className="text-center p-4 bg-gray-50 rounded-lg">
                           <Weight className="h-6 w-6 text-gray-600 mx-auto mb-2" />
                           <p className="text-sm text-gray-600 font-medium">Weight</p>
@@ -796,7 +796,7 @@ const FarmerDashboard = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-6">
                   <div className="p-4 border rounded-lg text-center">
                     <Package className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
                     <div className="text-2xl font-bold">{harvests.length}</div>
