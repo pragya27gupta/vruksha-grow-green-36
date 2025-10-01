@@ -608,10 +608,10 @@ const FarmerDashboard = () => {
               <Leaf className="h-6 w-6 md:h-8 md:w-8 text-green-600" />
             </div>
             <div className="min-w-0 flex-1">
-              <h1 className="text-xl md:text-3xl font-bold text-gray-900 truncate">
+              <h1 className="text-base md:text-3xl font-bold text-gray-900 leading-tight">
                 🌱 {t('farmerPortal')}
               </h1>
-              <p className="text-gray-600 text-sm md:text-lg line-clamp-2">
+              <p className="text-gray-600 text-xs md:text-lg line-clamp-2">
                 {t('simpleHarvestRecording')}
               </p>
             </div>
@@ -622,7 +622,7 @@ const FarmerDashboard = () => {
               { label: t('totalHarvests'), value: harvests.length.toString(), icon: Package, color: 'bg-blue-100 text-blue-600' },
               { label: t('verified'), value: harvests.filter(h => h.status === 'verified').length.toString(), icon: CheckCircle, color: 'bg-green-100 text-green-600' },
               { label: 'Total Weight', value: `${harvests.reduce((sum, h) => sum + h.weight, 0).toFixed(1)} kg`, icon: Weight, color: 'bg-yellow-100 text-yellow-600' },
-              { label: t('qualityScore'), value: '95%', icon: Eye, color: 'bg-purple-100 text-purple-600' }
+              { label: 'Quality Score', value: '95%', icon: Eye, color: 'bg-purple-100 text-purple-600' }
             ].map((stat, idx) => (
               <div key={idx} className="bg-white border border-gray-200 rounded-xl p-3 md:p-6 text-center shadow-sm hover:shadow-md transition-shadow">
                 <stat.icon className={`h-6 w-6 md:h-8 md:w-8 mx-auto mb-2 md:mb-3 ${stat.color}`} />
