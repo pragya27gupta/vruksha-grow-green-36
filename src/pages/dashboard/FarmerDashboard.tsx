@@ -634,18 +634,18 @@ const FarmerDashboard = () => {
         </div>
 
         <Tabs defaultValue="new-harvest" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 h-16 bg-white border border-green-200 rounded-2xl p-2">
-            <TabsTrigger value="new-harvest" className="flex items-center gap-2 h-12 text-lg font-medium rounded-xl data-[state=active]:bg-green-100 data-[state=active]:text-green-700">
-              <Plus className="h-5 w-5" />
-              {t('newHarvest')}
+          <TabsList className="grid w-full grid-cols-3 h-14 md:h-16 bg-white border border-green-200 rounded-2xl p-1.5 md:p-2">
+            <TabsTrigger value="new-harvest" className="flex items-center gap-1 md:gap-2 h-10 md:h-12 text-xs md:text-lg font-medium rounded-xl data-[state=active]:bg-green-100 data-[state=active]:text-green-700 px-2 md:px-3">
+              <Plus className="h-4 w-4 md:h-5 md:w-5 flex-shrink-0" />
+              <span className="truncate">{t('newHarvest')}</span>
             </TabsTrigger>
-            <TabsTrigger value="past-harvests" className="flex items-center gap-2 h-12 text-lg font-medium rounded-xl data-[state=active]:bg-green-100 data-[state=active]:text-green-700">
-              <Eye className="h-5 w-5" />
-              {t('pastHarvests')}
+            <TabsTrigger value="past-harvests" className="flex items-center gap-1 md:gap-2 h-10 md:h-12 text-xs md:text-lg font-medium rounded-xl data-[state=active]:bg-green-100 data-[state=active]:text-green-700 px-2 md:px-3">
+              <Eye className="h-4 w-4 md:h-5 md:w-5 flex-shrink-0" />
+              <span className="truncate">{t('pastHarvests')}</span>
             </TabsTrigger>
-            <TabsTrigger value="analytics" className="flex items-center gap-2 h-12 text-lg font-medium rounded-xl data-[state=active]:bg-green-100 data-[state=active]:text-green-700">
-              <Calendar className="h-5 w-5" />
-              {t('analyticsTab')}
+            <TabsTrigger value="analytics" className="flex items-center gap-1 md:gap-2 h-10 md:h-12 text-xs md:text-lg font-medium rounded-xl data-[state=active]:bg-green-100 data-[state=active]:text-green-700 px-2 md:px-3">
+              <Calendar className="h-4 w-4 md:h-5 md:w-5 flex-shrink-0" />
+              <span className="truncate">{t('analyticsTab')}</span>
             </TabsTrigger>
           </TabsList>
 
